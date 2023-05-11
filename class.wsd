@@ -1,0 +1,192 @@
+@startuml BankSystem
+
+Class Bank {
+    id: int {unique}
+    name: String
+    address: String
+    email: String {unique}
+    phone: String {unique}
+    website: String {unique}
+    List<Client> clients
+    TransactionManager: transactionManager
+
+    + Bank(id, name, address, email, phone, website)
+    + addClient(client): void
+    + removeClient(client): void
+}
+
+Class Account {
+    id: int {unique}
+    balance: double
+    accountNumber: String {unique}
+    client: Client
+    transactionHistory: TransactionHistory
+
+    + getId(): int
+    + getBalance(): double
+    + getAccountNumber(): String
+    + withdraw(amount): void
+    + deposit(amount): void
+    + transfer(amount, account): void
+    + getTransactionHistory(): TransactionHistory
+}
+
+Class DepositAccount {
+    endDate: Date
+    interestRate: double
+
+    + DepositAccount(endDate, interestRate)
+    + gainInterest(interestRate): void
+}
+
+Class Loan {
+    startDate: Date
+    endDate: Date
+    interestRate: double
+
+    + Loan(startDate, endDate, interestRate)
+    + getStartDate(): Date
+    + getEndDate(): Date
+    + getInterestRate(): double
+}
+
+Class DebitAccount {
+    overdraftLimit: double
+
+    + DebitAccount(overdraftLimit)
+    + getOverdraftLimit(): double
+    + setOverdraftLimit(overdraftLimit): void
+}
+
+Class Transaction {
+    id: int {unique}
+    amount: double
+    date: Date
+
+    + Transaction(id, amount, date)
+    + getId(): int
+    + getAmount(): double
+}
+
+Class Withdrawal {
+    place: String
+    atmId: int {unique}
+    fromAccount: Account
+
+    + Withdrawal(fromAccount,place,atmId)
+}
+
+Class Deposit {
+    place: String
+    atmId: int {unique}
+    toAccountId: int {unique} 
+
+    + Deposit(toAccountId,place,atmId)
+}
+
+Class Transfer {
+    fromAccount: Account
+    toAccountId: int {unique}
+    
+    + Transfer(fromAccount,toAccountId)
+}
+
+Class TransactionManager {
+    
+    + createWithdrawal(id,amount,date,fromAccount,place,atmId): Withdrawal
+    + createDeposit(id,amount,date,toAccount,place,atmId): Deposit
+    + createTransfer(id,amount,date,fromAccount,toAccount): Transfer
+    + verifyTransaction(transaction): boolean
+}
+
+Class TransactionHistory {
+    
+    + addTransaction(transaction): void
+    + getTransactions(): List<Transaction>
+}
+
+Class InterestRate {
+    id: int {unique}
+    rate: double
+    startDate: Date
+    endDate: Date
+
+    + InterestRate(id, rate, startDate, endDate)
+    + getId(): int
+    + getRate(): double
+    + updateInterestRate(interestRate): void
+}
+
+Class Reporting {
+    + Reporting()
+    + generateReport(): void
+    + filterReport(): void
+}
+
+Class InterBankPayments {
+    + InterBankPayments()
+    + transfer(id,amount,date, fromAccount, toAccountId, description): Transaction
+}
+
+Class PaymentCard {
+    id: int {unique}
+    cardNumber: String {unique}
+    expiryDate: Date
+    cvv: String
+    client: Client
+    account: DebitAccount
+
+    + PaymentCard(id, cardNumber, expiryDate, cvv, account)
+    + getId(): int
+    + getCardNumber(): String
+    + getExpiryDate(): Date
+    + getCvv(): String
+    + getAccount(): Account
+    + updatePaymentCard(paymentCard): void
+    + pay(amount): void
+}
+Class Client {
+    id: int {unique}
+    name: String
+    surname: String
+    address: String
+    email: String {unique}
+    List<Account> accounts
+
+    + Client(id, name, surname, address, email)
+    + getId(): int
+    + updateClient(client: Client): void
+    + openDebitAccount(): void
+    + openDepositAccount(endDate, interestRate): void
+    + openLoanAccount(startDate, endDate, interestRate): void
+}
+
+
+Client "1" -- "1..n" Reporting
+
+TransactionManager "1" -- "1..n" Transaction
+
+Transaction <|-- Withdrawal
+Transaction <|-- Deposit
+Transaction <|-- Transfer
+
+
+Account "1" -- "1" TransactionHistory
+
+PaymentCard "1" - "1" DebitAccount
+PaymentCard "1" -* "1" Client
+Client "1" *-- "1..n" Account
+
+Account <|-- DebitAccount
+Account <|-- DepositAccount
+Account <|-- Loan
+Account "1" - "1" TransactionManager
+
+DepositAccount "1" -- "1" InterestRate
+Loan "1" -- "1" InterestRate
+
+Bank "1..n" -- "1" InterBankPayments
+Bank "1" *-- "0..n" Client
+Bank "1" -- "1..n" TransactionManager
+
+@enduml
