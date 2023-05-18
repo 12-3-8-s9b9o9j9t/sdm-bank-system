@@ -1,10 +1,10 @@
-package bank.report;
+package bank.reporter;
 
 import bank.Customer;
 import bank.product.Product;
 import bank.transaction.Transaction;
 
-public class Report implements Visitor {
+public class Reporter implements Visitor {
     
     public void visitCustomer(Customer customer) {
         // TODO Auto-generated method stub

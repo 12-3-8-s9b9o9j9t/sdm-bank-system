@@ -6,7 +6,7 @@ import bank.Customer;
 
 public class BaseAccount extends Account {
 
-    private String ID;
+    private String ID; // assigned by the bank
     private Customer owner;
     private LocalDate openDate = LocalDate.now();
     private double balance = 0;

@@ -1,4 +1,4 @@
-package bank.report;
+package bank.reporter;
 
 import bank.Customer;
 import bank.product.Product;

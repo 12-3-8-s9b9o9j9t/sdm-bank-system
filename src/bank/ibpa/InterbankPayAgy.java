@@ -1,13 +1,15 @@
 package bank.ibpa;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
 import bank.Bank;
 
 public class InterbankPayAgy implements BankMediator {
 
-    private static Set<Bank> banks = new HashSet<>();
+    private static Map<String, Bank> banks = new HashMap<String, Bank>();
 
     public void notify(Bank sender, String event) {
         switch (event) {
@@ -17,8 +19,16 @@ public class InterbankPayAgy implements BankMediator {
         }
     }
 
-    private boolean registerBank(Bank bank) {
-        return banks.add(bank);
+    private void registerBank(Bank bank) {
+        String ID = generateID(bank.getName());
+        bank.setID(ID);
+        bank.setIBPA(this);
+        banks.put(ID, bank);
+    }
+
+    private String generateID(String name) {
+        Random random = new Random();
+        return name.toUpperCase(Locale.ENGLISH) + (random.nextInt() & Integer.MAX_VALUE);
     }
 
     private void transfer() {

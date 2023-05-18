@@ -6,7 +6,7 @@ import bank.product.Product;
 
 public class Customer {
 
-    private String ID;
+    private String ID; // the national ID of the customer
     private String name;
     private Bank bank;
     private List<Product> products = new ArrayList<Product>();
@@ -15,6 +15,10 @@ public class Customer {
         this.ID = ID;
         this.name = name;
         this.bank = bank;
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
     }
 
     //The Customer is defined by its ID and Bank
