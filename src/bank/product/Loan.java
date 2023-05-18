@@ -11,7 +11,7 @@ public class Loan extends Product {
     private LocalDate targetDate;
     private double amount;
 
-    Loan(Account account, Period period, double amount) {
+    public Loan(Account account, Period period, double amount) {
         this.targetDate = LocalDate.now().plus(period);
         this.account = account;
         this.amount = amount;

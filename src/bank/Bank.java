@@ -1,4 +1,6 @@
 package bank;
+
+import java.time.Period;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,8 +12,13 @@ import java.util.UUID;
 
 import bank.ibpa.BankMediator;
 import bank.ibpa.InterbankPayAgy;
+import bank.product.Credit;
+import bank.product.Deposit;
+import bank.product.Loan;
+import bank.product.Product;
 import bank.product.account.Account;
 import bank.product.account.BaseAccount;
+import bank.product.account.Debit;
 import bank.transaction.Transaction;
 
 public class Bank {
@@ -59,25 +66,51 @@ public class Bank {
         return true;
     }
 
+    public boolean createDebitAccount(Customer owner, Account account) {
+        Debit debitAccount = new Debit(account);
+        accounts.put(account.getID(), debitAccount);
+        owner.addProduct(debitAccount);
+        return true;
+    }
+    
+    public boolean createCredit(Customer owner, double limit) {
+        Credit credit = new Credit(limit);
+        owner.addProduct(credit);
+        return true;
+    }
+
+    public boolean makeLoan(Customer owner, Account account, Period period, double amount) {
+        Loan loan = new Loan(account, period, amount);
+        owner.addProduct(loan);
+        return true;
+    }
+
+    // makeDeposit
+    public boolean makeDeposit(Customer owner, Account account, Period period, double amount) {
+        Deposit deposit = new Deposit(account, period, amount);
+        owner.addProduct(deposit);
+        return true;
+    }
+
     private String generateAccountID() {
         return UUID.randomUUID()
-            .toString()
-            .replaceAll("-", "")
-            .toUpperCase(Locale.ENGLISH);
+                .toString()
+                .replaceAll("-", "")
+                .toUpperCase(Locale.ENGLISH);
     }
 
     public void log(Transaction transaction) {
         history.add(transaction);
     }
 
-    //The Bank is defined by its BIC
-    //override the hash method to use BIC
+    // The Bank is defined by its BIC
+    // override the hash method to use BIC
     @Override
     public int hashCode() {
         return ID.hashCode();
     }
 
-    //override the equals method to use BIC
+    // override the equals method to use BIC
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Bank) {

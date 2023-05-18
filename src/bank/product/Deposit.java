@@ -12,7 +12,7 @@ public class Deposit extends Product {
     private double max;
     private double current = 0;
 
-    Deposit(Account account, Period period, double max) {
+    public Deposit(Account account, Period period, double max) {
         this.targetDate = LocalDate.now().plus(period);
         this.account = account;
         this.max = max;

@@ -4,7 +4,7 @@ public class Debit extends AccountDecorator {
     
     private double overdraft;
 
-    Debit(Account wrapee) {
+    public Debit(Account wrapee) {
         super(wrapee);
     }
 
