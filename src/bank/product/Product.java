@@ -10,6 +10,7 @@ public abstract class Product {
     
     private List<Transaction> history = new LinkedList<>();
     private Interest interest;
+    private double balance;     // Utilisé par Interest
 
     public void log(Transaction transaction) {
         history.add(transaction);
@@ -17,5 +18,9 @@ public abstract class Product {
 
     public void setInterest(Interest interest) {
         this.interest = interest;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 }
