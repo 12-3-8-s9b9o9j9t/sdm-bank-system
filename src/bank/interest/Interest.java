@@ -10,19 +10,17 @@ public class Interest {
     public Date starDate;
     public Date endDate;
 
-    public Interest(State _state, int _id, Date _starDate, Date _endDate) {
+    public Interest(State _state, int _id) {
         state = _state;
-        id = _id;
-        starDate = _starDate;
-        endDate = _endDate;
+        id = _id; 
     }
 
     public void setState(State _state) {
         state = _state;
     }
 
-    public double calculate() {
-        return state.calculate();
+    public double calculate(Date starDate, Date endDate) {
+        return state.calculate(starDate, endDate);
     }
 
     public void extendDate(Date _endDate) {
