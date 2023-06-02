@@ -2,6 +2,9 @@ package bank.transaction;
 
 import java.time.LocalDate;
 
+import bank.Bank;
+import bank.product.Product;
+
 public abstract class Transaction {
 
     private String type;
@@ -14,5 +17,10 @@ public abstract class Transaction {
     }
 
     abstract public void execute();
+
+    protected void log(Bank bank, Product product) {
+        bank.log(this);
+        product.log(this);
+    }
     
 }

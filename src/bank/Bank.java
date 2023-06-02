@@ -2,12 +2,10 @@ package bank;
 
 import java.time.Period;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import bank.ibpa.BankMediator;
@@ -22,74 +20,65 @@ import bank.product.account.Debit;
 import bank.transaction.Transaction;
 
 public class Bank {
-    private String ID; // assigned by the IBPA
+    // key is the ID of the bank assigned by the IBPA
+    private Map<String, BankMediator> IBPAs = new HashMap<String, BankMediator>();
     private String name;
-    private BankMediator IBPA;
     private List<Transaction> history = new LinkedList<>();
-    private Set<Customer> customers = new HashSet<Customer>();
+    private Map<String, Customer> customers = new HashMap<String, Customer>();
     private Map<String, Account> accounts = new HashMap<String, Account>();
 
     public Bank(String name) {
         this.name = name;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
-    }
-
-    public void setIBPA(BankMediator IBPA) {
-        this.IBPA = IBPA;
+    public void addIBPA(String ID, BankMediator IBPA) {
+        IBPAs.put(ID, IBPA);
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean registerAtIBPA(InterbankPayAgy IBPA) {
+    public void registerAtIBPA(InterbankPayAgy IBPA) {
         IBPA.notify(this, "register");
-        return this.ID != null && this.IBPA == IBPA;
     }
 
     /*
      * Here we suppose the ID is the national ID of the customer
      */
-    public boolean registerCustomer(String ID, String name) {
+    public Customer registerCustomer(String ID, String name) {
+        if (customers.containsKey(ID)) {
+            return null;
+        }
         Customer customer = new Customer(ID, name, this);
-        return customers.add(customer);
+        customers.put(ID, customer);
+        return customer;
     }
 
-    public boolean openAccount(Customer owner) {
+    public Product createAccount(Customer owner) {
         String ID = generateAccountID();
         Account account = new BaseAccount(ID, owner);
         owner.addProduct(account);
         accounts.put(ID, account);
-        return true;
-    }
-
-    public boolean createDebitAccount(Customer owner, Account account) {
-        Debit debitAccount = new Debit(account);
-        accounts.put(account.getID(), debitAccount);
-        owner.addProduct(debitAccount);
-        return true;
+        return account;
     }
     
-    public boolean createCredit(Customer owner, double limit) {
+    public Product createCredit(Customer owner, double limit) {
         Credit credit = new Credit(limit);
         owner.addProduct(credit);
-        return true;
+        return credit;
     }
 
-    public boolean makeLoan(Customer owner, Account account, Period period, double amount) {
+    public Product createLoan(Customer owner, Account account, Period period, double amount) {
         Loan loan = new Loan(account, period, amount);
         owner.addProduct(loan);
-        return true;
+        return loan;
     }
 
-    // makeDeposit
-    public boolean makeDeposit(Customer owner, Account account, Period period, double amount) {
+    public Product createDeposit(Customer owner, Account account, Period period, double amount) {
         Deposit deposit = new Deposit(account, period, amount);
         owner.addProduct(deposit);
-        return true;
+        return deposit;
     }
 
     private String generateAccountID() {
@@ -101,23 +90,6 @@ public class Bank {
 
     public void log(Transaction transaction) {
         history.add(transaction);
-    }
-
-    // The Bank is defined by its BIC
-    // override the hash method to use BIC
-    @Override
-    public int hashCode() {
-        return ID.hashCode();
-    }
-
-    // override the equals method to use BIC
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Bank) {
-            Bank bank = (Bank) obj;
-            return ID.equals(bank.ID);
-        }
-        return false;
     }
 
 }

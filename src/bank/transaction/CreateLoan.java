@@ -4,9 +4,10 @@ import java.time.Period;
 
 import bank.Bank;
 import bank.Customer;
+import bank.product.Product;
 import bank.product.account.Account;
 
-class CreateLoan extends Transaction {
+public class CreateLoan extends Transaction {
 
     private Customer owner;
     private Account account;
@@ -14,14 +15,15 @@ class CreateLoan extends Transaction {
     private Period period;
     private double amount;
 
-    CreateLoan(Bank bank, Customer owner, Account account, Period period, double amount) {
-        super("createLoan", "loan");
+    public CreateLoan(Bank bank, Customer owner, Account account, Period period, double amount) {
+        super(CreateLoan.class.getSimpleName(), "loan");
         this.account = account;
         this.bank = bank;
     }
 
     @Override
     public void execute() {
-        bank.makeLoan(owner,account,period,amount);
+        Product loan = bank.createLoan(owner,account,period,amount);
+        log(bank, loan);
     }
 }

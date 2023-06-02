@@ -21,8 +21,7 @@ public class InterbankPayAgy implements BankMediator {
 
     private void registerBank(Bank bank) {
         String ID = generateID(bank.getName());
-        bank.setID(ID);
-        bank.setIBPA(this);
+        bank.addIBPA(ID, this);
         banks.put(ID, bank);
     }
 

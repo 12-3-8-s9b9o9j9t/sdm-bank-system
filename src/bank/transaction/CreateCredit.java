@@ -2,6 +2,7 @@ package bank.transaction;
 
 import bank.Bank;
 import bank.Customer;
+import bank.product.Product;
 
 public class CreateCredit extends Transaction {
 
@@ -10,7 +11,7 @@ public class CreateCredit extends Transaction {
     private double limit;
 
     public CreateCredit(Bank bank, Customer owner, double limit) {
-        super("createDebit", "debit account");
+        super(CreateCredit.class.getSimpleName(), "debit account");
         this.bank = bank;
         this.owner = owner;
         this.limit = limit;
@@ -18,9 +19,8 @@ public class CreateCredit extends Transaction {
 
     @Override
     public void execute() {
-        bank.createCredit(owner, limit);
+        Product credit = bank.createCredit(owner, limit);
+        log(bank, credit);
     }
-    
-        
     
 }
