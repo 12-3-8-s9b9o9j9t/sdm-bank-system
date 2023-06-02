@@ -3,32 +3,14 @@ package bank.interest;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class Interest {
+public abstract class Interest {
 
-    private State state;
+    public abstract double calculate(LocalDate starDate, LocalDate endDate);
 
-    public LocalDate starDate;
-    public LocalDate endDate;
-
-    public Interest(State _state) {
-        state = _state;
-    }
-
-    public void setState(State _state) {
-        state = _state;
-    }
-
-    public double calculate(LocalDate starDate, LocalDate endDate) {
-        return state.calculate(starDate, endDate);
-    }
-
-    public void extendDate(LocalDate _endDate) {
-        endDate = _endDate;
-    }
-
-    public int getDurationInYears() {
+    protected static double getDurationInYears(LocalDate starDate, LocalDate endDate) {
         Period period = Period.between(starDate, endDate)
             .normalized();
-        return period.getYears() + period.getMonths() / 12 + period.getDays() / 365;
+        return period.getYears() + (double)period.getMonths() / 12 + (double)period.getDays() / 365;
     }
+
 }

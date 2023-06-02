@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import bank.product.Product;
 
-public class CustomInterest extends Interest implements State {
+public class CustomInterest extends Interest {
 
     private Product product;
     private double interest_rate;
@@ -15,7 +15,7 @@ public class CustomInterest extends Interest implements State {
     }
 
     public double calculate(LocalDate starDate, LocalDate endDate) {
-        return product.getBalance() * interest_rate * 
+        return product.getBalance() * interest_rate * getDurationInYears(starDate, endDate);
     }
     
 }
