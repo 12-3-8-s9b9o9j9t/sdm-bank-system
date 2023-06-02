@@ -8,6 +8,11 @@ public class StandardInterest implements State {
     Interest interest;
     private double interest_rate = 0.01;
 
+    public StandardInterest(Product product, Interest interest) {
+        this.product = product;
+        this.interest = interest;
+    }
+
     public double calculate() {
         return product.getBalance() * interest_rate * interest.getDurationInYears();
     }
