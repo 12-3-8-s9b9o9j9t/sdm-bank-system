@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 import bank.product.Product;
 
-public class HighInterest implements State {
+public class HighInterest extends Interest {
 
-    Product product;
+    private Product product;
     private double interest_rate = 0.02;
 
     public HighInterest(Product product) {
@@ -14,7 +14,7 @@ public class HighInterest implements State {
     }
 
     public double calculate(LocalDate starDate, LocalDate endDate) {
-        return product.getBalance() * interest_rate * (endDate.getTime() - starDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+        return product.getBalance() * interest_rate * getDurationInYears(starDate, endDate);
     }
     
 }

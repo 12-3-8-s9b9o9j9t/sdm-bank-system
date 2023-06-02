@@ -4,15 +4,15 @@ import java.time.LocalDate;
 
 import bank.product.Product;
 
-public class NullInterest implements State {
+public class NullInterest extends Interest {
 
-    Product product;
+    private Product product;
 
     public NullInterest(Product product) {
         this.product = product;
     }
 
-    public double calculate(Date starDate, Date endDate) {
+    public double calculate(LocalDate starDate, LocalDate endDate) {
         return product.getBalance() * 0.0;
     }
     
