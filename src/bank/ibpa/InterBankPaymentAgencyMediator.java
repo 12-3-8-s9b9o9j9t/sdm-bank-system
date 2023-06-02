@@ -7,10 +7,11 @@ import java.util.Random;
 
 import bank.Bank;
 
-public class IntBnkPmtAgy {
+public class InterBankPaymentAgencyMediator implements IMediator {
 
     private static Map<String, Bank> banks = new HashMap<String, Bank>();
 
+    @Override
     public void notify(Bank sender, String event) {
         switch (event) {
         case "register":
@@ -23,7 +24,6 @@ public class IntBnkPmtAgy {
     }
 
     private void registerBank(Bank bank) {
-
         String ID = generateID(bank.getName());
         bank.addIBPA(ID, this);
         banks.put(ID, bank);

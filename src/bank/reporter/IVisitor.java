@@ -2,14 +2,14 @@ package bank.reporter;
 
 import bank.Customer;
 import bank.product.Product;
-import bank.transaction.Transaction;
+import bank.transaction.ATransactionCommand;
 
-public interface Visitor {
+public interface IVisitor {
 
     public void visitCustomer(Customer customer);
 
     public void visitProduct(Product product);
 
-    public void visitTransaction(Transaction transaction);
+    public void visitTransaction(ATransactionCommand transaction);
     
 }

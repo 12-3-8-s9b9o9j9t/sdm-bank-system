@@ -2,9 +2,9 @@ package bank.reporter;
 
 import bank.Customer;
 import bank.product.Product;
-import bank.transaction.Transaction;
+import bank.transaction.ATransactionCommand;
 
-public class Reporter implements Visitor {
+public class ReporterVisitor implements IVisitor {
     
     public void visitCustomer(Customer customer) {
         // TODO Auto-generated method stub
@@ -14,7 +14,7 @@ public class Reporter implements Visitor {
         // TODO Auto-generated method stub
     }
 
-    public void visitTransaction(Transaction transaction) {
+    public void visitTransaction(ATransactionCommand transaction) {
         // TODO Auto-generated method stub
     }
 

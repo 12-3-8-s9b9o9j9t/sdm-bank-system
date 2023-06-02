@@ -1,10 +1,10 @@
 package bank.product.account;
 
-public class Debit extends AccountDecorator {
+public class DebitDecorator extends AAccountDecorator {
     
     private double overdraft;
 
-    public Debit(Account wrapee) {
+    public DebitDecorator(AAccount wrapee) {
         super(wrapee);
     }
 

@@ -4,11 +4,11 @@ import java.time.LocalDate;
 
 import bank.product.Product;
 
-public class NullInterest extends Interest {
+public class NullInterestState extends AInterestState {
 
     private Product product;
 
-    public NullInterest(Product product) {
+    public NullInterestState(Product product) {
         this.product = product;
     }
 

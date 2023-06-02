@@ -4,14 +4,13 @@ import java.time.LocalDate;
 
 import bank.product.Product;
 
-public class CustomInterest extends Interest {
+public class HighInterestState extends AInterestState {
 
     private Product product;
-    private double interest_rate;
+    private double interest_rate = 0.02;
 
-    public CustomInterest(double _interest_rate, Product product) {
+    public HighInterestState(Product product) {
         this.product = product;
-        interest_rate = _interest_rate;
     }
 
     public double calculate(LocalDate starDate, LocalDate endDate) {

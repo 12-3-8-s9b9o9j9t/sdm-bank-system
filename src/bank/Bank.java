@@ -8,29 +8,29 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import bank.ibpa.IntBnkPmtAgy;
+import bank.ibpa.InterBankPaymentAgencyMediator;
 import bank.product.Credit;
 import bank.product.Deposit;
 import bank.product.Loan;
 import bank.product.Product;
-import bank.product.account.Account;
+import bank.product.account.AAccount;
 import bank.product.account.BaseAccount;
-import bank.product.account.Debit;
-import bank.transaction.Transaction;
+import bank.product.account.DebitDecorator;
+import bank.transaction.ATransactionCommand;
 
 public class Bank {
     // key is the ID of the bank assigned by the IBPA
-    private Map<String, IntBnkPmtAgy> IBPAs = new HashMap<String, IntBnkPmtAgy>();
+    private Map<String, InterBankPaymentAgencyMediator> IBPAs = new HashMap<>();
     private String name;
-    private List<Transaction> history = new LinkedList<>();
-    private Map<String, Customer> customers = new HashMap<String, Customer>();
-    private Map<String, Account> accounts = new HashMap<String, Account>();
+    private List<ATransactionCommand> history = new LinkedList<>();
+    private Map<String, Customer> customers = new HashMap<>();
+    private Map<String, AAccount> accounts = new HashMap<>();
 
     public Bank(String name) {
         this.name = name;
     }
 
-    public void addIBPA(String ID, IntBnkPmtAgy IBPA) {
+    public void addIBPA(String ID, InterBankPaymentAgencyMediator IBPA) {
         IBPAs.put(ID, IBPA);
     }
 
@@ -38,7 +38,7 @@ public class Bank {
         return name;
     }
 
-    public void registerAtIBPA(IntBnkPmtAgy IBPA) {
+    public void registerAtIBPA(InterBankPaymentAgencyMediator IBPA) {
         if (IBPAs.containsValue(IBPA)) {
             throw new RuntimeException("Bank already registered");
         }
@@ -62,7 +62,7 @@ public class Bank {
             throw new RuntimeException("Customer not registered");
         }
         String ID = generateAccountID();
-        Account account = new BaseAccount(ID, owner);
+        AAccount account = new BaseAccount(ID, owner);
         owner.addProduct(account);
         accounts.put(ID, account);
         return account;
@@ -77,7 +77,7 @@ public class Bank {
         return credit;
     }
 
-    public Product createLoan(Customer owner, Account account, Period period, double amount) {
+    public Product createLoan(Customer owner, AAccount account, Period period, double amount) {
         if (owner.getBank() != this) {
             throw new RuntimeException("Customer not registered");
         }
@@ -86,7 +86,7 @@ public class Bank {
         return loan;
     }
 
-    public Product createDeposit(Customer owner, Account account, Period period, double amount) {
+    public Product createDeposit(Customer owner, AAccount account, Period period, double amount) {
         if (owner.getBank() != this) {
             throw new RuntimeException("Customer not registered");
         }
@@ -102,7 +102,7 @@ public class Bank {
                 .toUpperCase(Locale.ENGLISH);
     }
 
-    public void log(Transaction transaction) {
+    public void log(ATransactionCommand transaction) {
         history.add(transaction);
     }
 

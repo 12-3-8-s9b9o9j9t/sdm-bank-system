@@ -1,9 +1,9 @@
 package bank.product.account;
 
-public abstract class AccountDecorator extends Account {
-    private Account wrapee;
+public abstract class AAccountDecorator extends AAccount {
+    private AAccount wrapee;
 
-    public AccountDecorator(Account wrapee) {
+    public AAccountDecorator(AAccount wrapee) {
         this.wrapee = wrapee;
     }
 

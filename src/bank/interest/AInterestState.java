@@ -3,7 +3,7 @@ package bank.interest;
 import java.time.LocalDate;
 import java.time.Period;
 
-public abstract class Interest {
+public abstract class AInterestState {
 
     public abstract double calculate(LocalDate starDate, LocalDate endDate);
 

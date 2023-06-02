@@ -4,12 +4,12 @@ import java.time.LocalDate;
 
 import bank.product.Product;
 
-public class StandardInterest extends Interest {
+public class LowInterestState extends AInterestState {
 
     private Product product;
-    private double interest_rate = 0.01;
+    private double interest_rate = 0.005;
 
-    public StandardInterest(Product product) {
+    public LowInterestState(Product product) {
         this.product = product;
     }
 

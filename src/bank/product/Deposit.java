@@ -3,16 +3,16 @@ package bank.product;
 import java.time.LocalDate;
 import java.time.Period;
 
-import bank.product.account.Account;
+import bank.product.account.AAccount;
 
 public class Deposit extends Product {
 
-    private Account account;
+    private AAccount account;
     private LocalDate targetDate;
     private double max;
     private double current = 0;
 
-    public Deposit(Account account, Period period, double max) {
+    public Deposit(AAccount account, Period period, double max) {
         this.targetDate = LocalDate.now().plus(period);
         this.account = account;
         this.max = max;

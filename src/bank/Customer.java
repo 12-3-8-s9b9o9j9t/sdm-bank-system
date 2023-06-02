@@ -6,19 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import bank.product.Product;
-import bank.product.account.Account;
-import bank.transaction.CreateAccount;
-import bank.transaction.CreateCredit;
-import bank.transaction.CreateDeposit;
-import bank.transaction.CreateLoan;
+import bank.product.account.AAccount;
+import bank.transaction.CreateAccountCommand;
+import bank.transaction.CreateCreditCommand;
+import bank.transaction.CreateDepositCommand;
+import bank.transaction.CreateLoanCommand;
 
 public class Customer {
 
     private String ID; // the national ID of the customer
     private String name;
     private Bank bank;
-    private List<Product> products = new ArrayList<Product>();
-    private Map<String, Account> accounts = new HashMap<String, Account>();
+    private List<Product> products = new ArrayList<>();
+    private Map<String, AAccount> accounts = new HashMap<>();
 
     // package-private constructor, only Bank can create Customer
     Customer(String ID, String name, Bank bank) {
@@ -40,30 +40,30 @@ public class Customer {
     }
 
     public void createAcount() {
-        new CreateAccount(bank, this)
+        new CreateAccountCommand(bank, this)
             .execute();
     }
 
     public void createCredit(double limit) {
-        new CreateCredit(bank, this, limit)
+        new CreateCreditCommand(bank, this, limit)
             .execute();
     }
 
     public void createLoan(String accountID, Period period, double amount) {
-        Account account = accounts.get(accountID);
+        AAccount account = accounts.get(accountID);
         if (account == null) {
             throw new RuntimeException("Account not found");
         }
-        new CreateLoan(bank, this, account, period, amount)
+        new CreateLoanCommand(bank, this, account, period, amount)
             .execute();
     }
 
     public void createDeposit(String accountID, Period period, double amount) {
-        Account account = accounts.get(accountID);
+        AAccount account = accounts.get(accountID);
         if (account == null) {
             throw new RuntimeException("Account not found");
         }
-        new CreateDeposit(bank, this, account, period, amount)
+        new CreateDepositCommand(bank, this, account, period, amount)
             .execute();
     }
     

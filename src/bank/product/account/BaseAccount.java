@@ -3,9 +3,9 @@ package bank.product.account;
 import java.time.LocalDate;
 
 import bank.Customer;
-import bank.interest.Interest;
+import bank.interest.AInterestState;
 
-public class BaseAccount extends Account {
+public class BaseAccount extends AAccount {
 
     private String ID; // assigned by the bank
     private Customer owner;
@@ -51,8 +51,8 @@ public class BaseAccount extends Account {
     //override the equals method to use ID
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Account) {
-            Account account = (Account) obj;
+        if (obj instanceof AAccount) {
+            AAccount account = (AAccount) obj;
             return ID.equals(account.getID());
         }
         return false;

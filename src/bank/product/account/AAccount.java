@@ -1,9 +1,9 @@
 package bank.product.account;
 
-import bank.interest.Interest;
+import bank.interest.AInterestState;
 import bank.product.Product;
 
-public abstract class Account extends Product {
+public abstract class AAccount extends Product {
 
     abstract public String getID();
 

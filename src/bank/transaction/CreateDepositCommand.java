@@ -5,18 +5,18 @@ import java.time.Period;
 import bank.Bank;
 import bank.Customer;
 import bank.product.Product;
-import bank.product.account.Account;
+import bank.product.account.AAccount;
 
-public class CreateDeposit extends Transaction {
+public class CreateDepositCommand extends ATransactionCommand {
 
     private Customer owner;
-    private Account account;
+    private AAccount account;
     private Bank bank;
     private Period period;
     private double amount;
 
-    public CreateDeposit(Bank bank, Customer owner, Account account, Period period, double amount) {
-        super(CreateDeposit.class.getSimpleName(), "deposit");
+    public CreateDepositCommand(Bank bank, Customer owner, AAccount account, Period period, double amount) {
+        super(CreateDepositCommand.class.getSimpleName(), "deposit");
         this.account = account;
         this.bank = bank;
     }

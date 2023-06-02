@@ -3,16 +3,16 @@ package bank.product;
 import java.time.LocalDate;
 import java.time.Period;
 
-import bank.interest.Interest;
-import bank.product.account.Account;
+import bank.interest.AInterestState;
+import bank.product.account.AAccount;
 
 public class Loan extends Product {
 
-    private Account account;
+    private AAccount account;
     private LocalDate targetDate;
     private double amount;
 
-    public Loan(Account account, Period period, double amount) {
+    public Loan(AAccount account, Period period, double amount) {
         this.targetDate = LocalDate.now().plus(period);
         this.account = account;
         this.amount = amount;
