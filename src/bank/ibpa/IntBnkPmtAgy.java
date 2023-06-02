@@ -14,7 +14,9 @@ public class IntBnkPmtAgy {
     public void notify(Bank sender, String event) {
         switch (event) {
         case "register":
-            assert !banks.containsValue(sender) : "Already registered";
+            if (banks.containsValue(sender)) {
+                throw new RuntimeException("Bank already registered");
+            }
             registerBank(sender);
             break;
         }

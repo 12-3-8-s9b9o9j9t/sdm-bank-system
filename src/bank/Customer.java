@@ -27,6 +27,10 @@ public class Customer {
         this.bank = bank;
     }
 
+    public String getID() {
+        return ID;
+    }
+
     Bank getBank() {
         return bank;
     }
@@ -47,14 +51,18 @@ public class Customer {
 
     public void createLoan(String accountID, Period period, double amount) {
         Account account = accounts.get(accountID);
-        assert account != null : "Account not found";
+        if (account == null) {
+            throw new RuntimeException("Account not found");
+        }
         new CreateLoan(bank, this, account, period, amount)
             .execute();
     }
 
     public void createDeposit(String accountID, Period period, double amount) {
         Account account = accounts.get(accountID);
-        assert account != null : "Account not found";
+        if (account == null) {
+            throw new RuntimeException("Account not found");
+        }
         new CreateDeposit(bank, this, account, period, amount)
             .execute();
     }
