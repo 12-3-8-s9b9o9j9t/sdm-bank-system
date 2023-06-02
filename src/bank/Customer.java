@@ -27,6 +27,10 @@ public class Customer {
         this.bank = bank;
     }
 
+    Bank getBank() {
+        return bank;
+    }
+
     public void addProduct(Product product) {
         products.add(product);
     }
@@ -43,18 +47,14 @@ public class Customer {
 
     public void createLoan(String accountID, Period period, double amount) {
         Account account = accounts.get(accountID);
-        if (account == null) {
-            throw new IllegalArgumentException(String.format("Account %s not found", accountID));
-        }
+        assert account != null : "Account not found";
         new CreateLoan(bank, this, account, period, amount)
             .execute();
     }
 
     public void createDeposit(String accountID, Period period, double amount) {
         Account account = accounts.get(accountID);
-        if (account == null) {
-            throw new IllegalArgumentException(String.format("Account %s not found", accountID));
-        }
+        assert account != null : "Account not found";
         new CreateDeposit(bank, this, account, period, amount)
             .execute();
     }

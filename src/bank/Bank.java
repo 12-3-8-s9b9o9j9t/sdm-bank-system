@@ -39,6 +39,7 @@ public class Bank {
     }
 
     public void registerAtIBPA(IntBnkPmtAgy IBPA) {
+        assert !IBPAs.containsValue(IBPA) : "Already registered";
         IBPA.notify(this, "register");
     }
 
@@ -46,15 +47,14 @@ public class Bank {
      * Here we suppose the ID is the national ID of the customer
      */
     public Customer registerCustomer(String ID, String name) {
-        if (customers.containsKey(ID)) {
-            return null;
-        }
+        assert !customers.containsKey(ID) : "Customer already registered";
         Customer customer = new Customer(ID, name, this);
         customers.put(ID, customer);
         return customer;
     }
 
     public Product createAccount(Customer owner) {
+        assert owner.getBank() == this : "Customer is not registered at this bank";
         String ID = generateAccountID();
         Account account = new BaseAccount(ID, owner);
         owner.addProduct(account);
@@ -63,18 +63,21 @@ public class Bank {
     }
     
     public Product createCredit(Customer owner, double limit) {
+        assert owner.getBank() == this : "Customer is not registered at this bank";
         Credit credit = new Credit(limit);
         owner.addProduct(credit);
         return credit;
     }
 
     public Product createLoan(Customer owner, Account account, Period period, double amount) {
+        assert owner.getBank() == this : "Customer is not registered at this bank";
         Loan loan = new Loan(account, period, amount);
         owner.addProduct(loan);
         return loan;
     }
 
     public Product createDeposit(Customer owner, Account account, Period period, double amount) {
+        assert owner.getBank() == this : "Customer is not registered at this bank";
         Deposit deposit = new Deposit(account, period, amount);
         owner.addProduct(deposit);
         return deposit;

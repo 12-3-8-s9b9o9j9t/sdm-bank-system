@@ -14,12 +14,14 @@ public class IntBnkPmtAgy {
     public void notify(Bank sender, String event) {
         switch (event) {
         case "register":
+            assert !banks.containsValue(sender) : "Already registered";
             registerBank(sender);
             break;
         }
     }
 
     private void registerBank(Bank bank) {
+
         String ID = generateID(bank.getName());
         bank.addIBPA(ID, this);
         banks.put(ID, bank);
