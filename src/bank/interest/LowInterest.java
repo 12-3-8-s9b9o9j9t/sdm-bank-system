@@ -1,6 +1,6 @@
 package bank.interest;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import bank.product.Product;
 
@@ -9,7 +9,7 @@ public class LowInterest implements State {
     Product product;
     private double interest_rate = 0.005;
 
-    public LowInterest(Product product, Interest interest) {
+    public LowInterest(Product product) {
         this.product = product;
     }
 

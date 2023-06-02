@@ -6,6 +6,7 @@ public class Credit extends Product {
 
     public Credit(double limit) {
         this.limit = limit;
+        setInterest(null /* TODO */);
     }
 
     public void borrow(double amount) {

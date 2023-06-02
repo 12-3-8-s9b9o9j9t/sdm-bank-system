@@ -3,6 +3,7 @@ package bank.product;
 import java.time.LocalDate;
 import java.time.Period;
 
+import bank.interest.Interest;
 import bank.product.account.Account;
 
 public class Loan extends Product {
@@ -15,6 +16,7 @@ public class Loan extends Product {
         this.targetDate = LocalDate.now().plus(period);
         this.account = account;
         this.amount = amount;
+        setInterest(null /* TODO */);
     }
 
     public void borrow() {

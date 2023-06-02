@@ -16,6 +16,7 @@ public class Deposit extends Product {
         this.targetDate = LocalDate.now().plus(period);
         this.account = account;
         this.max = max;
+        setInterest(null /* TODO */);
     }
 
     public void supply(double amount) {

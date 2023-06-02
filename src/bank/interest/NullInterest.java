@@ -1,6 +1,6 @@
 package bank.interest;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import bank.product.Product;
 

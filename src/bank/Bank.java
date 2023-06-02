@@ -8,8 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import bank.ibpa.BankMediator;
-import bank.ibpa.InterbankPayAgy;
+import bank.ibpa.IntBnkPmtAgy;
 import bank.product.Credit;
 import bank.product.Deposit;
 import bank.product.Loan;
@@ -21,7 +20,7 @@ import bank.transaction.Transaction;
 
 public class Bank {
     // key is the ID of the bank assigned by the IBPA
-    private Map<String, BankMediator> IBPAs = new HashMap<String, BankMediator>();
+    private Map<String, IntBnkPmtAgy> IBPAs = new HashMap<String, IntBnkPmtAgy>();
     private String name;
     private List<Transaction> history = new LinkedList<>();
     private Map<String, Customer> customers = new HashMap<String, Customer>();
@@ -31,7 +30,7 @@ public class Bank {
         this.name = name;
     }
 
-    public void addIBPA(String ID, BankMediator IBPA) {
+    public void addIBPA(String ID, IntBnkPmtAgy IBPA) {
         IBPAs.put(ID, IBPA);
     }
 
@@ -39,7 +38,7 @@ public class Bank {
         return name;
     }
 
-    public void registerAtIBPA(InterbankPayAgy IBPA) {
+    public void registerAtIBPA(IntBnkPmtAgy IBPA) {
         IBPA.notify(this, "register");
     }
 

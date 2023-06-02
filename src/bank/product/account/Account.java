@@ -1,5 +1,6 @@
 package bank.product.account;
 
+import bank.interest.Interest;
 import bank.product.Product;
 
 public abstract class Account extends Product {

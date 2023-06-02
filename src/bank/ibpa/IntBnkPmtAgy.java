@@ -7,7 +7,7 @@ import java.util.Random;
 
 import bank.Bank;
 
-public class InterbankPayAgy implements BankMediator {
+public class IntBnkPmtAgy {
 
     private static Map<String, Bank> banks = new HashMap<String, Bank>();
 

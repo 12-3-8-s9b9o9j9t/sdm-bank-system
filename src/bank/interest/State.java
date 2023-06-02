@@ -1,9 +1,9 @@
 package bank.interest;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public interface State {
 
-    public double calculate(Date starDate, Date endDate);
+    public double calculate(LocalDate starDate, LocalDate endDate);
 
 }

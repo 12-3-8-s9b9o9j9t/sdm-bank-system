@@ -1,33 +1,34 @@
 package bank.interest;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 public class Interest {
 
     private State state;
 
-    public int id;
-    public Date starDate;
-    public Date endDate;
+    public LocalDate starDate;
+    public LocalDate endDate;
 
-    public Interest(State _state, int _id) {
+    public Interest(State _state) {
         state = _state;
-        id = _id; 
     }
 
     public void setState(State _state) {
         state = _state;
     }
 
-    public double calculate(Date starDate, Date endDate) {
+    public double calculate(LocalDate starDate, LocalDate endDate) {
         return state.calculate(starDate, endDate);
     }
 
-    public void extendDate(Date _endDate) {
+    public void extendDate(LocalDate _endDate) {
         endDate = _endDate;
     }
 
     public int getDurationInYears() {
-        return (int) ((endDate.getTime() - starDate.getTime()) / (1000 * 60 * 60 * 24 * 365));
+        Period period = Period.between(starDate, endDate)
+            .normalized();
+        return period.getYears() + period.getMonths() / 12 + period.getDays() / 365;
     }
 }

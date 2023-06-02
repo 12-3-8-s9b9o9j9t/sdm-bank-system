@@ -3,6 +3,7 @@ package bank.product.account;
 import java.time.LocalDate;
 
 import bank.Customer;
+import bank.interest.Interest;
 
 public class BaseAccount extends Account {
 
@@ -14,6 +15,7 @@ public class BaseAccount extends Account {
     public BaseAccount(String ID, Customer owner) {
         this.ID = ID;
         this.owner = owner;
+        setInterest(null /* TODO */);
     }
 
     public String getID() {
