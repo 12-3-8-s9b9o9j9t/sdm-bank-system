@@ -94,6 +94,34 @@ public class Bank {
         owner.addProduct(deposit);
         return deposit;
     }
+    // Make Withdraw
+    public void makeWithdraw(Customer owner, AAccount account, Period period, double amount) {
+        if (owner.getBank() != this) {
+            throw new RuntimeException("Customer not registered");
+        }
+
+        //Withdrawn on the account
+        account.withdraw(amount);
+    }
+
+    // Make Payment
+    public void makePayment(Customer owner, AAccount account, Period period, double amount, Card card) {
+        if (owner.getBank() != this) {
+            throw new RuntimeException("Customer not registered");
+        }
+        //Make Payment
+        account.pay(amount);
+    }
+
+    // Make Transfert
+    public void makeTransfert(Customer owner, AAccount account, AAccount accountrecept, Period period, double amount) {
+        if (owner.getBank() != this) {
+            throw new RuntimeException("Customer not registered");
+        }
+        //Make transfert
+        account.transfert(account, accountrecept, amount);
+
+    }
 
     private String generateAccountID() {
         return UUID.randomUUID()

@@ -9,19 +9,19 @@ public class DebitDecorator extends AAccountDecorator {
     }
 
     @Override
-    public void pay() {
+    public void pay(double amount) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void receive() {
+    public void receive(double amount) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void transfert() {
+    public void transfert(AAccount accountIDSend, AAccount accountIDRecept, double amount) {
         // TODO Auto-generated method stub
         
     }
