@@ -4,7 +4,8 @@ public class Credit extends Product {
     private double limit;
     private double amount;
 
-    public Credit(double limit) {
+    public Credit(String ID, double limit) {
+        super(ID);
         this.limit = limit;
         setInterest(null /* TODO */);
     }

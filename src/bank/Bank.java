@@ -8,6 +8,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import bank.exception.BankAlreadyRegisteredAtIBPAException;
+import bank.exception.CustomerAlreadyExistsException;
+import bank.exception.InvalidCustomerException;
 import bank.ibpa.InterBankPaymentAgencyMediator;
 import bank.product.Credit;
 import bank.product.Deposit;
@@ -23,24 +26,26 @@ public class Bank {
     private Map<String, InterBankPaymentAgencyMediator> IBPAs = new HashMap<>();
     private String name;
     private List<ATransactionCommand> history = new LinkedList<>();
-    private Map<String, Customer> customers = new HashMap<>();
-    private Map<String, AAccount> accounts = new HashMap<>();
+    private Map<Integer, Customer> customers = new HashMap<>();
 
     public Bank(String name) {
         this.name = name;
-    }
-
-    public void addIBPA(String ID, InterBankPaymentAgencyMediator IBPA) {
-        IBPAs.put(ID, IBPA);
     }
 
     public String getName() {
         return name;
     }
 
+    public void addIBPA(String ID, InterBankPaymentAgencyMediator IBPA) {
+        if (IBPAs.containsValue(IBPA)) {
+            throw new BankAlreadyRegisteredAtIBPAException(name, IBPA.getName());
+        }
+        IBPAs.put(ID, IBPA);
+    }
+
     public void registerAtIBPA(InterBankPaymentAgencyMediator IBPA) {
         if (IBPAs.containsValue(IBPA)) {
-            throw new RuntimeException("Bank already registered");
+            throw new BankAlreadyRegisteredAtIBPAException(name, IBPA.getName());
         }
         IBPA.notify(this, "register");
     }
@@ -49,53 +54,54 @@ public class Bank {
      * Here we suppose the ID is the national ID of the customer
      */
     public Customer registerCustomer(String ID, String name) {
-        if (customers.containsKey(ID)) {
-            throw new RuntimeException("Customer already registered");
+        int hash = ID.hashCode();
+        if (customers.containsKey(hash)) {
+            throw new CustomerAlreadyExistsException(ID);
         }
-        Customer customer = new Customer(ID, name, this);
-        customers.put(ID, customer);
+        Customer customer = new Customer(hash, name, this);
+        customers.put(hash, customer);
         return customer;
     }
 
     public Product createAccount(Customer owner) {
-        if (owner.getBank() != this) {
-            throw new RuntimeException("Customer not registered");
-        }
-        String ID = generateAccountID();
+        checkCustomer(owner);
+        String ID = generateProductID();
         AAccount account = new BaseAccount(ID, owner);
         owner.addProduct(account);
-        accounts.put(ID, account);
         return account;
     }
     
     public Product createCredit(Customer owner, double limit) {
-        if (owner.getBank() != this) {
-            throw new RuntimeException("Customer not registered");
-        }
-        Credit credit = new Credit(limit);
+        checkCustomer(owner);
+        String ID = "CRD" + generateProductID();
+        Credit credit = new Credit(ID, limit);
         owner.addProduct(credit);
         return credit;
     }
 
     public Product createLoan(Customer owner, AAccount account, Period period, double amount) {
-        if (owner.getBank() != this) {
-            throw new RuntimeException("Customer not registered");
-        }
-        Loan loan = new Loan(account, period, amount);
+        checkCustomer(owner);
+        String ID = "LOA" + generateProductID();
+        Loan loan = new Loan(ID, account, period, amount);
         owner.addProduct(loan);
         return loan;
     }
 
     public Product createDeposit(Customer owner, AAccount account, Period period, double amount) {
-        if (owner.getBank() != this) {
-            throw new RuntimeException("Customer not registered");
-        }
-        Deposit deposit = new Deposit(account, period, amount);
+        checkCustomer(owner);
+        String ID = "DEP" + generateProductID();
+        Deposit deposit = new Deposit(ID, account, period, amount);
         owner.addProduct(deposit);
         return deposit;
     }
 
-    private String generateAccountID() {
+    private void checkCustomer(Customer owner) {
+        if (owner.getBank() != this) {
+            throw new InvalidCustomerException(name);
+        }
+    }
+
+    private String generateProductID() {
         return UUID.randomUUID()
                 .toString()
                 .replaceAll("-", "")

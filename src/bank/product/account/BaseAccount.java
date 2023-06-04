@@ -7,19 +7,14 @@ import bank.interest.AInterestState;
 
 public class BaseAccount extends AAccount {
 
-    private String ID; // assigned by the bank
     private Customer owner;
     private LocalDate openDate = LocalDate.now();
     private double balance = 0;
 
     public BaseAccount(String ID, Customer owner) {
-        this.ID = ID;
+        super(ID);
         this.owner = owner;
         setInterest(null /* TODO */);
-    }
-
-    public String getID() {
-        return ID;
     }
 
     @Override
@@ -40,21 +35,4 @@ public class BaseAccount extends AAccount {
         
     }
 
-
-    //The Account is defined by its ID
-    //override the hash method to use ID
-    @Override
-    public int hashCode() {
-        return ID.hashCode();
-    }
-
-    //override the equals method to use ID
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof AAccount) {
-            AAccount account = (AAccount) obj;
-            return ID.equals(account.getID());
-        }
-        return false;
-    }
 }

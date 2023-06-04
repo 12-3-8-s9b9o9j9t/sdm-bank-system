@@ -10,9 +10,18 @@ import bank.transaction.ATransactionCommand;
 
 public abstract class Product {
     
+    private String ID; // given by the bank
     private List<ATransactionCommand> history = new LinkedList<>();
     private AInterestState interest_state;
     private double balance;
+
+    public Product(String ID) {
+        this.ID = ID;
+    }
+
+    public String getID() {
+        return ID;
+    }
 
     public void log(ATransactionCommand transaction) {
         history.add(transaction);

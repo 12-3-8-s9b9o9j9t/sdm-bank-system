@@ -5,7 +5,9 @@ import bank.product.Product;
 
 public abstract class AAccount extends Product {
 
-    abstract public String getID();
+    public AAccount(String ID) {
+        super(ID);
+    }
 
     abstract public void pay();
 

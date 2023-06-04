@@ -14,20 +14,19 @@ import bank.transaction.CreateLoanCommand;
 
 public class Customer {
 
-    private String ID; // the national ID of the customer
+    private int ID;
     private String name;
     private Bank bank;
-    private List<Product> products = new ArrayList<>();
-    private Map<String, AAccount> accounts = new HashMap<>();
+    private Map<String, Product> products = new HashMap<>();
 
     // package-private constructor, only Bank can create Customer
-    Customer(String ID, String name, Bank bank) {
+    Customer(int ID, String name, Bank bank) {
         this.ID = ID;
         this.name = name;
         this.bank = bank;
     }
 
-    public String getID() {
+    public int getID() {
         return ID;
     }
 
@@ -35,8 +34,16 @@ public class Customer {
         return bank;
     }
 
+    public Map<String, Product> getProducts() {
+        return products;
+    }
+
+    public Product getProduct(String ID) {
+        return products.get(ID);
+    }
+
     public void addProduct(Product product) {
-        products.add(product);
+        products.put(product.getID(), product);
     }
 
     public void createAcount() {
@@ -49,22 +56,14 @@ public class Customer {
             .execute();
     }
 
-    public void createLoan(String accountID, Period period, double amount) {
-        AAccount account = accounts.get(accountID);
-        if (account == null) {
-            throw new RuntimeException("Account not found");
-        }
+    public void createLoan(AAccount account, Period period, double amount) {
         new CreateLoanCommand(bank, this, account, period, amount)
             .execute();
     }
 
-    public void createDeposit(String accountID, Period period, double amount) {
-        AAccount account = accounts.get(accountID);
-        if (account == null) {
-            throw new RuntimeException("Account not found");
-        }
+    public void createDeposit(AAccount account, Period period, double amount) {
         new CreateDepositCommand(bank, this, account, period, amount)
             .execute();
     }
-    
+
 }

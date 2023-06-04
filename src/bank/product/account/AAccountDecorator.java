@@ -4,6 +4,7 @@ public abstract class AAccountDecorator extends AAccount {
     private AAccount wrapee;
 
     public AAccountDecorator(AAccount wrapee) {
+        super(wrapee.getID());
         this.wrapee = wrapee;
     }
 
