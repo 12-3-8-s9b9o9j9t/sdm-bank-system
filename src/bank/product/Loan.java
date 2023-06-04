@@ -3,6 +3,7 @@ package bank.product;
 import java.time.LocalDate;
 import java.time.Period;
 
+import bank.Bank;
 import bank.interest.AInterestState;
 import bank.product.account.AAccount;
 
@@ -12,22 +13,16 @@ public class Loan extends Product {
     private LocalDate targetDate;
     private double amount;
 
-    public Loan(String ID, AAccount account, Period period, double amount) {
-        super(ID);
-        this.targetDate = LocalDate.now().plus(period);
+    public Loan(String ID, Bank bank, AAccount account, Period period, double amount) {
+        super(ID, bank);
+        this.targetDate = getCreationDate().plus(period);
         this.account = account;
         this.amount = amount;
-        setInterest(null /* TODO */);
-    }
-
-    public void borrow() {
-        // TODO Auto-generated method stub
-
+        this.account.supply(amount);
     }
 
     public void repay(double amount) {
-        // TODO Auto-generated method stub
-
+        this.amount -= amount;
     }
     
 }

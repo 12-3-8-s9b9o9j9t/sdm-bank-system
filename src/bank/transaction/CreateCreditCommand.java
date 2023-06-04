@@ -11,7 +11,7 @@ public class CreateCreditCommand extends ATransactionCommand {
     private double limit;
 
     public CreateCreditCommand(Bank bank, Customer owner, double limit) {
-        super(CreateCreditCommand.class.getSimpleName(), "debit account");
+        super("Create Credit", "Creating Credit");
         this.bank = bank;
         this.owner = owner;
         this.limit = limit;
@@ -20,7 +20,7 @@ public class CreateCreditCommand extends ATransactionCommand {
     @Override
     public void execute() {
         Product credit = bank.createCredit(owner, limit);
-        log(bank, credit);
+        credit.log(this);
     }
     
 }

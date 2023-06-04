@@ -12,6 +12,7 @@ import bank.exception.BankAlreadyRegisteredAtIBPAException;
 import bank.exception.CustomerAlreadyExistsException;
 import bank.exception.InvalidCustomerException;
 import bank.ibpa.InterBankPaymentAgencyMediator;
+import bank.interest.AInterestState;
 import bank.product.Credit;
 import bank.product.Deposit;
 import bank.product.Loan;
@@ -20,6 +21,7 @@ import bank.product.account.AAccount;
 import bank.product.account.BaseAccount;
 import bank.product.account.DebitDecorator;
 import bank.transaction.ATransactionCommand;
+import bank.transaction.ChangeInterestCommand;
 
 public class Bank {
     // key is the ID of the bank assigned by the IBPA
@@ -66,7 +68,7 @@ public class Bank {
     public Product createAccount(Customer owner) {
         checkCustomer(owner);
         String ID = generateProductID();
-        AAccount account = new BaseAccount(ID, owner);
+        AAccount account = new BaseAccount(ID, this, owner);
         owner.addProduct(account);
         return account;
     }
@@ -74,7 +76,7 @@ public class Bank {
     public Product createCredit(Customer owner, double limit) {
         checkCustomer(owner);
         String ID = "CRD" + generateProductID();
-        Credit credit = new Credit(ID, limit);
+        Credit credit = new Credit(ID, this, limit);
         owner.addProduct(credit);
         return credit;
     }
@@ -82,7 +84,7 @@ public class Bank {
     public Product createLoan(Customer owner, AAccount account, Period period, double amount) {
         checkCustomer(owner);
         String ID = "LOA" + generateProductID();
-        Loan loan = new Loan(ID, account, period, amount);
+        Loan loan = new Loan(ID, this, account, period, amount);
         owner.addProduct(loan);
         return loan;
     }
@@ -90,37 +92,23 @@ public class Bank {
     public Product createDeposit(Customer owner, AAccount account, Period period, double amount) {
         checkCustomer(owner);
         String ID = "DEP" + generateProductID();
-        Deposit deposit = new Deposit(ID, account, period, amount);
+        Deposit deposit = new Deposit(ID, this, account, period, amount);
         owner.addProduct(deposit);
         return deposit;
     }
-    // Make Withdraw
-    public void makeWithdraw(Customer owner, AAccount account, Period period, double amount) {
-        if (owner.getBank() != this) {
-            throw new RuntimeException("Customer not registered");
-        }
 
-        //Withdrawn on the account
-        account.withdraw(amount);
+    public Product extendAccountWithDebit(Customer owner, AAccount account, double limit) {
+        checkCustomer(owner);
+        DebitDecorator debit = new DebitDecorator(account, limit);
+        owner.addProduct(debit);
+        return debit;
     }
 
-    // Make Payment
-    public void makePayment(Customer owner, AAccount account, Period period, double amount/*, Card card*/) {
-        if (owner.getBank() != this) {
-            throw new RuntimeException("Customer not registered");
-        }
-        //Make Payment
-        account.pay(amount);
-    }
-
-    // Make Transfert
-    public void makeTransfert(Customer owner, AAccount account, AAccount accountrecept, Period period, double amount) {
-        if (owner.getBank() != this) {
-            throw new RuntimeException("Customer not registered");
-        }
-        //Make transfert
-        account.transfert(account, accountrecept, amount);
-
+    public void changeInterest(int customerID, String productID, AInterestState state) {
+        Customer customer = customers.get(customerID);
+        Product product = customer.getProduct(productID);
+        new ChangeInterestCommand(product, state)
+            .execute();
     }
 
     private void checkCustomer(Customer owner) {

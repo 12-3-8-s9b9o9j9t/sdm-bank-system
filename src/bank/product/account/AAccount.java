@@ -1,24 +1,23 @@
 package bank.product.account;
 
-import bank.interest.AInterestState;
+import bank.Bank;
+import bank.exception.OperationNotAffordableException;
 import bank.product.Product;
 
 public abstract class AAccount extends Product {
 
-    public AAccount(String ID) {
-        super(ID);
+    public AAccount(String ID, Bank bank) {
+        super(ID, bank);
+    }
+
+    protected Bank getBank() {
+        return super.getBank();
     }
 
     abstract public double getBalance();
 
-    abstract public void setBalance(double balance);
+    abstract public void charge(double amount) throws OperationNotAffordableException;
 
-    abstract public void pay(double amount);
-
-    abstract public void receive(double amount);
-
-    abstract public void transfert(AAccount accountIDSend, AAccount accountIDRecept, double amount);
-
-    abstract public void withdraw(double amount);
+    abstract public void supply(double amount);
 
 }

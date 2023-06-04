@@ -1,41 +1,57 @@
 package bank.product;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.LinkedList;
 import java.util.List;
 
+import bank.Bank;
 import bank.interest.AInterestState;
 import bank.transaction.ATransactionCommand;
 
 public abstract class Product {
     
     private String ID; // given by the bank
+    private Bank bank;
     private List<ATransactionCommand> history = new LinkedList<>();
-    private AInterestState interest_state;
-    private double balance;
+    private LocalDate creationDate = LocalDate.now();
+    private AInterestState interestState;
 
-    public Product(String ID) {
+    public Product(String ID, Bank bank) {
         this.ID = ID;
+        this.bank = bank;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public List<ATransactionCommand> getHistory() {
+        return history;
+    }
+
+    protected void setHistory(List<ATransactionCommand> history) {
+        this.history = history;
     }
 
     public String getID() {
         return ID;
     }
 
+    protected Bank getBank() {
+        return bank;
+    }
+
     public void log(ATransactionCommand transaction) {
+        bank.log(transaction);
         history.add(transaction);
     }
 
-    public void setInterest(AInterestState _state) {
-        interest_state = _state;
+    public void setInterest(AInterestState state) {
+        interestState = state;
     }
 
+    /*
     public double calculateInterest(LocalDate starDate, LocalDate endDate) {
-        return interest_state.calculate(starDate, endDate);
-    }
-
-    public double getBalance() {
-        return balance;
-    }
+        return interestState.calculate(starDate, endDate);
+    }*/
 }

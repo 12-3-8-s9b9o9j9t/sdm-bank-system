@@ -1,23 +1,28 @@
 package bank.product;
+
+import bank.Bank;
+import bank.exception.OperationNotAffordableException;
+
 public class Credit extends Product {
     
     private double limit;
     private double amount;
 
-    public Credit(String ID, double limit) {
-        super(ID);
+    public Credit(String ID, Bank bank,  double limit) {
+        super(ID, bank);
         this.limit = limit;
-        setInterest(null /* TODO */);
     }
 
-    public void borrow(double amount) {
-        // TODO Auto-generated method stub
-
+    public void borrow(double amount) throws OperationNotAffordableException {
+        if (this.amount + amount <= limit) {
+            this.amount += amount;
+        } else {
+            throw new OperationNotAffordableException("borrow " + amount, getID());
+        }
     }
 
     public void repay(double amount) {
-        // TODO Auto-generated method stub
-
+        this.amount -= amount;
     }
 
 }

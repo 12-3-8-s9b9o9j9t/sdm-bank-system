@@ -16,7 +16,7 @@ public class CreateLoanCommand extends ATransactionCommand {
     private double amount;
 
     public CreateLoanCommand(Bank bank, Customer owner, AAccount account, Period period, double amount) {
-        super(CreateLoanCommand.class.getSimpleName(), "loan");
+        super("Create Loan", "Creating Loan");
         this.account = account;
         this.bank = bank;
     }
@@ -24,6 +24,6 @@ public class CreateLoanCommand extends ATransactionCommand {
     @Override
     public void execute() {
         Product loan = bank.createLoan(owner,account,period,amount);
-        log(bank, loan);
+        loan.log(this);
     }
 }

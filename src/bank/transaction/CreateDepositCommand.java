@@ -16,7 +16,7 @@ public class CreateDepositCommand extends ATransactionCommand {
     private double amount;
 
     public CreateDepositCommand(Bank bank, Customer owner, AAccount account, Period period, double amount) {
-        super(CreateDepositCommand.class.getSimpleName(), "deposit");
+        super("Create Deposit", "Creating Deposit");
         this.account = account;
         this.bank = bank;
     }
@@ -24,6 +24,6 @@ public class CreateDepositCommand extends ATransactionCommand {
     @Override
     public void execute() {
         Product deposit = bank.createDeposit(owner, account, period, amount);
-        log(bank, deposit);
+        deposit.log(this);
     }
 }

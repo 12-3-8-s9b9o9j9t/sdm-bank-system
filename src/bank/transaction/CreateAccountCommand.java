@@ -10,7 +10,7 @@ public class CreateAccountCommand extends ATransactionCommand {
     private Bank bank;
 
     public CreateAccountCommand(Bank bank, Customer owner) {
-        super(CreateAccountCommand.class.getSimpleName() , "base account");
+        super("Create Account" , "Creating Account");
         this.owner = owner;
         this.bank = bank;
     }
@@ -18,6 +18,6 @@ public class CreateAccountCommand extends ATransactionCommand {
     @Override
     public void execute() {
         Product account = bank.createAccount(owner);
-        log(bank, account);
+        account.log(this);
     }
 }

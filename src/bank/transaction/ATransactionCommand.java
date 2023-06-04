@@ -17,10 +17,5 @@ public abstract class ATransactionCommand {
     }
 
     abstract public void execute();
-
-    protected void log(Bank bank, Product product) {
-        bank.log(this);
-        product.log(this);
-    }
     
 }

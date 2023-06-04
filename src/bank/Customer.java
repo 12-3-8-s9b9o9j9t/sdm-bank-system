@@ -5,13 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bank.exception.InvalidProductException;
+import bank.product.Deposit;
 import bank.product.Product;
 import bank.product.account.AAccount;
-import bank.transaction.CloseAccountCommand;
+import bank.transaction.CloseDepositCommand;
 import bank.transaction.CreateAccountCommand;
 import bank.transaction.CreateCreditCommand;
 import bank.transaction.CreateDepositCommand;
 import bank.transaction.CreateLoanCommand;
+import bank.transaction.ExtendAccountWithDebitCommand;
 import bank.transaction.PayCommand;
 import bank.transaction.TransferCommand;
 import bank.transaction.WithdrawCommand;
@@ -50,6 +53,10 @@ public class Customer {
         products.put(product.getID(), product);
     }
 
+    public boolean removeProduct(Product product) {
+        return products.remove(product.getID()) != null;
+    }
+
     public void createAcount() {
         new CreateAccountCommand(bank, this)
             .execute();
@@ -61,17 +68,37 @@ public class Customer {
     }
 
     public void createLoan(AAccount account, Period period, double amount) {
+        checkProduct(account);
         new CreateLoanCommand(bank, this, account, period, amount)
             .execute();
     }
 
     public void createDeposit(AAccount account, Period period, double amount) {
+        checkProduct(account);
         new CreateDepositCommand(bank, this, account, period, amount)
             .execute();
     }
 
-<<<<<<< HEAD
-=======
+    public void extendAccountWithDebit(AAccount account, double limit) {
+        checkProduct(account);
+        new ExtendAccountWithDebitCommand(bank, this, account, limit)
+            .execute();
+    }
+
+    public void closeDeposit(Deposit deposit) {
+        checkProduct(deposit);
+        new CloseDepositCommand(deposit)
+                .execute();
+    }
+
+    private void checkProduct(Product product) {
+        if(!products.containsKey(product.getID())) {
+            throw new InvalidProductException(product.getID());
+        }
+    }
+
+    // -------------------------------
+
     public void createWithdraw(String accountID, Period period, double amount) {
         AAccount account = accounts.get(accountID);
         if (account == null) {
@@ -135,20 +162,5 @@ public class Customer {
         new TransferCommand(bank, account, accountIDrecept, period, amount, this)
                 .execute();
     }
-
-    //Delete Account
-    public void DeleteAccoun(String accountID) {
-        AAccount account = accounts.get(accountID);
-        if (account == null) {
-            throw new RuntimeException("Account not found");
-        }
-
-        //If everything is clear, we call the command
-        new CloseAccountCommand(bank, account, accountID)
-                .execute();
-    }
-
-
     
->>>>>>> transaction
 }
