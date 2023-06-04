@@ -3,9 +3,11 @@ package bank.transaction;
 import java.time.LocalDate;
 
 import bank.Bank;
+import bank.IElement;
 import bank.product.Product;
+import bank.reporter.IVisitor;
 
-public abstract class ATransactionCommand {
+public abstract class ATransactionCommand implements IElement {
 
     private String type;
     private LocalDate date = LocalDate.now();
@@ -16,6 +18,18 @@ public abstract class ATransactionCommand {
         this.description = description;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     abstract public void execute();
 
     protected void log(Bank bank, Product product) {
@@ -23,4 +37,7 @@ public abstract class ATransactionCommand {
         product.log(this);
     }
     
+    public void accept(IVisitor visitor) {
+        visitor.visitTransaction(this);
+    }
 }

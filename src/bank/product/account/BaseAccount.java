@@ -3,7 +3,7 @@ package bank.product.account;
 import java.time.LocalDate;
 
 import bank.Customer;
-import bank.interest.AInterestState;
+import bank.reporter.IVisitor;
 
 public class BaseAccount extends AAccount {
 
@@ -20,6 +20,14 @@ public class BaseAccount extends AAccount {
 
     public String getID() {
         return ID;
+    }
+
+    public LocalDate getOpenDate() {
+        return openDate;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 
     @Override
@@ -56,5 +64,10 @@ public class BaseAccount extends AAccount {
             return ID.equals(account.getID());
         }
         return false;
+    }
+
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visitBaseAccount(this);        
     }
 }

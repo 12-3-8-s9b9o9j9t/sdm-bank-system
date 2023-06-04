@@ -7,12 +7,13 @@ import java.util.Map;
 
 import bank.product.Product;
 import bank.product.account.AAccount;
+import bank.reporter.IVisitor;
 import bank.transaction.CreateAccountCommand;
 import bank.transaction.CreateCreditCommand;
 import bank.transaction.CreateDepositCommand;
 import bank.transaction.CreateLoanCommand;
 
-public class Customer {
+public class Customer implements IElement {
 
     private String ID; // the national ID of the customer
     private String name;
@@ -31,8 +32,16 @@ public class Customer {
         return ID;
     }
 
+    public String getName() {
+        return name;
+    }
+
     Bank getBank() {
         return bank;
+    }
+
+    public Map<String, Product> getProducts() {
+        return null;
     }
 
     public void addProduct(Product product) {
@@ -65,6 +74,11 @@ public class Customer {
         }
         new CreateDepositCommand(bank, this, account, period, amount)
             .execute();
+    }
+
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visitCustomer(this);
     }
     
 }

@@ -1,14 +1,15 @@
 package bank.product;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.LinkedList;
 import java.util.List;
 
+import bank.IElement;
 import bank.interest.AInterestState;
+import bank.reporter.IVisitor;
 import bank.transaction.ATransactionCommand;
 
-public abstract class Product {
+public abstract class Product implements IElement {
     
     private List<ATransactionCommand> history = new LinkedList<>();
     private AInterestState interest_state;
@@ -29,4 +30,7 @@ public abstract class Product {
     public double getBalance() {
         return balance;
     }
+
+    public abstract void accept(IVisitor visitor);
+
 }

@@ -3,8 +3,8 @@ package bank.product;
 import java.time.LocalDate;
 import java.time.Period;
 
-import bank.interest.AInterestState;
 import bank.product.account.AAccount;
+import bank.reporter.IVisitor;
 
 public class Loan extends Product {
 
@@ -19,6 +19,19 @@ public class Loan extends Product {
         setInterest(null /* TODO */);
     }
 
+    public AAccount getAccount() {
+        return account;
+    }
+
+    public LocalDate getTargetDate() {
+        return targetDate;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+    
+
     public void borrow() {
         // TODO Auto-generated method stub
 
@@ -28,5 +41,9 @@ public class Loan extends Product {
         // TODO Auto-generated method stub
 
     }
-    
+
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visitLoan(this);
+    }
 }
