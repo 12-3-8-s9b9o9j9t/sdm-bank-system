@@ -9,10 +9,16 @@ public abstract class AAccount extends Product {
         super(ID);
     }
 
-    abstract public void pay();
+    abstract public double getBalance();
 
-    abstract public void receive();
+    abstract public void setBalance(double balance);
 
-    abstract public void transfert();
+    abstract public void pay(double amount);
+
+    abstract public void receive(double amount);
+
+    abstract public void transfert(AAccount accountIDSend, AAccount accountIDRecept, double amount);
+
+    abstract public void withdraw(double amount);
 
 }
