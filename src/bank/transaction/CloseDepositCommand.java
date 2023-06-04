@@ -12,9 +12,10 @@ public class CloseDepositCommand extends ATransactionCommand {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         deposit.close();
         deposit.log(this);
+        return true;
     }
 
 }

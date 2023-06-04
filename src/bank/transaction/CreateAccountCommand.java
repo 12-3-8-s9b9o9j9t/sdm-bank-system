@@ -16,8 +16,9 @@ public class CreateAccountCommand extends ATransactionCommand {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Product account = bank.createAccount(owner);
         account.log(this);
+        return true;
     }
 }

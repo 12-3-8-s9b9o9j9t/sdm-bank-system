@@ -18,9 +18,10 @@ public class CreateCreditCommand extends ATransactionCommand {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Product credit = bank.createCredit(owner, limit);
         credit.log(this);
+        return true;
     }
     
 }

@@ -22,8 +22,9 @@ public class CreateDepositCommand extends ATransactionCommand {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Product deposit = bank.createDeposit(owner, account, period, amount);
         deposit.log(this);
+        return true;
     }
 }

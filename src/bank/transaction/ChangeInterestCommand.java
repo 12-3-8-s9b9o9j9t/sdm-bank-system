@@ -15,9 +15,10 @@ public class ChangeInterestCommand extends ATransactionCommand {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         product.setInterest(state);
         product.log(this);
+        return true;
     }
     
 }

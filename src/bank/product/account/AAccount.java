@@ -1,10 +1,12 @@
 package bank.product.account;
 
 import bank.Bank;
-import bank.exception.OperationNotAffordableException;
+import bank.exception.InvalidTransactionException;
+import bank.product.IChargeable;
+import bank.product.ISuppliable;
 import bank.product.Product;
 
-public abstract class AAccount extends Product {
+public abstract class AAccount extends Product implements IChargeable, ISuppliable {
 
     public AAccount(String ID, Bank bank) {
         super(ID, bank);
@@ -15,9 +17,5 @@ public abstract class AAccount extends Product {
     }
 
     abstract public double getBalance();
-
-    abstract public void charge(double amount) throws OperationNotAffordableException;
-
-    abstract public void supply(double amount);
 
 }

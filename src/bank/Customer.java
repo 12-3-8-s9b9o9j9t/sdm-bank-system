@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bank.exception.InvalidAmountException;
 import bank.exception.InvalidProductException;
 import bank.product.Deposit;
+import bank.product.IChargeable;
+import bank.product.ISuppliable;
 import bank.product.Product;
 import bank.product.account.AAccount;
 import bank.transaction.CloseDepositCommand;
@@ -15,9 +18,9 @@ import bank.transaction.CreateCreditCommand;
 import bank.transaction.CreateDepositCommand;
 import bank.transaction.CreateLoanCommand;
 import bank.transaction.ExtendAccountWithDebitCommand;
-import bank.transaction.PayCommand;
+import bank.transaction.SupplyProductCommand;
 import bank.transaction.TransferCommand;
-import bank.transaction.WithdrawCommand;
+import bank.transaction.ChargeProductCommand;
 
 public class Customer {
 
@@ -63,23 +66,27 @@ public class Customer {
     }
 
     public void createCredit(double limit) {
+        checkAmount(limit);
         new CreateCreditCommand(bank, this, limit)
             .execute();
     }
 
     public void createLoan(AAccount account, Period period, double amount) {
+        checkAmount(amount);
         checkProduct(account);
         new CreateLoanCommand(bank, this, account, period, amount)
             .execute();
     }
 
     public void createDeposit(AAccount account, Period period, double amount) {
+        checkAmount(amount);
         checkProduct(account);
         new CreateDepositCommand(bank, this, account, period, amount)
             .execute();
     }
 
     public void extendAccountWithDebit(AAccount account, double limit) {
+        checkAmount(limit);
         checkProduct(account);
         new ExtendAccountWithDebitCommand(bank, this, account, limit)
             .execute();
@@ -91,76 +98,28 @@ public class Customer {
                 .execute();
     }
 
+    public void supplyProduct(ISuppliable supplied, double amount) {
+        checkAmount(amount);
+        Product product = (Product)supplied;
+        checkProduct(product);
+    }
+
+    public void chargeProduct(IChargeable charged, double amount) {
+        checkAmount(amount);
+        Product product = (Product)charged;
+        checkProduct(product);
+    }
+
     private void checkProduct(Product product) {
         if(!products.containsKey(product.getID())) {
             throw new InvalidProductException(product.getID());
         }
     }
 
-    // -------------------------------
-
-    public void createWithdraw(String accountID, Period period, double amount) {
-        AAccount account = accounts.get(accountID);
-        if (account == null) {
-            throw new RuntimeException("Account not found");
+    private void checkAmount(double amount) {
+        if (amount <= 0) {
+            throw new InvalidAmountException();
         }
-
-        //Can't do a withdrow of 0 or negative value
-        if (amount == 0) {
-            throw new RuntimeException("Invalid amount");
-        }
-
-        if (amount<= 0) {
-            throw new RuntimeException("Invalid amount");
-        }
-
-        //If everything is clear, we call the command
-        new WithdrawCommand(bank, account, period, amount, this)
-                .execute();
-    }
-
-    public void createPayment(String accountID, Period period, double amount, Card card) {
-        AAccount account = accounts.get(accountID);
-        if (account == null) {
-            throw new RuntimeException("Account not found");
-        }
-
-        //Can't do a payment of 0 or negative value
-        if (amount == 0) {
-            throw new RuntimeException("Invalid amount");
-        }
-
-        if (amount<= 0) {
-            throw new RuntimeException("Invalid amount");
-        }
-
-        //If everything is clear, we call the command
-        new PayCommand(bank, account, period, amount, this, card)
-                .execute();
-    }
-
-    //Make Transfert
-    public void createTransfert(String accountID, AAccount accountIDrecept, Period period, double amount) {
-        AAccount account = accounts.get(accountID);
-        if (account == null) {
-            throw new RuntimeException("Account not found");
-        }
-        if (accountIDrecept == null) {
-            throw new RuntimeException("Account not found");
-        }
-
-        //Can't do a payment of 0 or negative value
-        if (amount == 0) {
-            throw new RuntimeException("Invalid amount");
-        }
-
-        if (amount<= 0) {
-            throw new RuntimeException("Invalid amount");
-        }
-
-        //If everything is clear, we call the command
-        new TransferCommand(bank, account, accountIDrecept, period, amount, this)
-                .execute();
     }
     
 }

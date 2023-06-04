@@ -16,6 +16,14 @@ public abstract class ATransactionCommand {
         this.description = description;
     }
 
-    abstract public void execute();
+    public String getDescription() {
+        return description;
+    }
+
+    protected void setDescription(String description) {
+        this.description = description;
+    }
+
+    abstract public boolean execute();
     
 }

@@ -1,9 +1,9 @@
 package bank.product;
 
 import bank.Bank;
-import bank.exception.OperationNotAffordableException;
+import bank.exception.InvalidTransactionException;
 
-public class Credit extends Product {
+public class Credit extends Product implements IChargeable, ISuppliable {
     
     private double limit;
     private double amount;
@@ -13,15 +13,20 @@ public class Credit extends Product {
         this.limit = limit;
     }
 
-    public void borrow(double amount) throws OperationNotAffordableException {
-        if (this.amount + amount <= limit) {
+    @Override
+    public void charge(double amount) throws InvalidTransactionException {
+        if (amount > 0 && this.amount + amount <= limit) {
             this.amount += amount;
         } else {
-            throw new OperationNotAffordableException("borrow " + amount, getID());
+            throw new InvalidTransactionException("borrow " + amount, getID());
         }
     }
 
-    public void repay(double amount) {
+    @Override
+    public void supply(double amount) throws InvalidTransactionException {
+        if (amount <= 0) {
+            throw new InvalidTransactionException("repay " + amount, getID());
+        }
         this.amount -= amount;
     }
 

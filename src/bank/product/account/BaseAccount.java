@@ -2,7 +2,7 @@ package bank.product.account;
 
 import bank.Bank;
 import bank.Customer;
-import bank.exception.OperationNotAffordableException;
+import bank.exception.InvalidTransactionException;
 import bank.interest.AInterestState;
 
 public class BaseAccount extends AAccount {
@@ -21,15 +21,18 @@ public class BaseAccount extends AAccount {
     }
 
     @Override
-    public void charge(double amount) throws OperationNotAffordableException {
-        if (this.balance < amount) {
-            throw new OperationNotAffordableException("charge " + amount, getID());
+    public void charge(double amount) throws InvalidTransactionException {
+        if (amount <= 0 || this.balance < amount) {
+            throw new InvalidTransactionException("charge " + amount, getID());
         }
         this.balance -= amount;
     }
 
     @Override
-    public void supply(double amount) {
+    public void supply(double amount) throws InvalidTransactionException {
+        if (amount <= 0) {
+            throw new InvalidTransactionException("supply " + amount, getID());
+        }
         this.balance += amount;
     }
 

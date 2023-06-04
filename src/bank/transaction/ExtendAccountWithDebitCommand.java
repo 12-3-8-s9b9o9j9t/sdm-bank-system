@@ -20,9 +20,10 @@ public class ExtendAccountWithDebitCommand extends ATransactionCommand {
     }
     
     @Override
-    public void execute() {
+    public boolean execute() {
         bank.extendAccountWithDebit(owner, account, limit);
         account.log(this);
+        return true;
     }
     
 }

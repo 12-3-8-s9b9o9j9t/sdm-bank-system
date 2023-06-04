@@ -6,7 +6,7 @@ import bank.product.account.AAccount;
 
 import java.time.Period;
 
-public class InterestCommand extends ATransactionCommand {
+public class CalculateInterestCommand extends ATransactionCommand {
 
     private Customer owner;
     private AAccount account;
@@ -16,8 +16,8 @@ public class InterestCommand extends ATransactionCommand {
 
 
 
-    public InterestCommand(Bank bank, AAccount account, Period period, double amount, Customer owner ) {
-        super(InterestCommand.class.getSimpleName(), "Interest");
+    public CalculateInterestCommand(Bank bank, AAccount account, Period period, double amount, Customer owner ) {
+        super(CalculateInterestCommand.class.getSimpleName(), "Interest");
         this.bank = bank;
         this.account = account;
         this.period = period;

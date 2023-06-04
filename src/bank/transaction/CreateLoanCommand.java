@@ -22,8 +22,9 @@ public class CreateLoanCommand extends ATransactionCommand {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Product loan = bank.createLoan(owner,account,period,amount);
         loan.log(this);
+        return true;
     }
 }
