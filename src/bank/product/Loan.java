@@ -5,7 +5,6 @@ import java.time.Period;
 
 import bank.Bank;
 import bank.exception.InvalidTransactionException;
-import bank.interest.AInterestStrategy;
 import bank.interest.FixedInterestStrategy;
 import bank.product.account.AAccount;
 import bank.transaction.ChargeProductCommand;

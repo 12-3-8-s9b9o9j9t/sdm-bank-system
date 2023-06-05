@@ -24,6 +24,11 @@ public class BaseAccount extends AAccount {
     }
 
     @Override
+    public Customer getOwner() {
+        return this.owner;
+    }
+
+    @Override
     public void charge(double amount) throws InvalidTransactionException {
         if (amount <= 0 || this.balance < amount) {
             throw new InvalidTransactionException("charge " + amount + "for product " + getID(), "problematic amount");

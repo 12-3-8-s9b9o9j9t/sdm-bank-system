@@ -20,5 +20,10 @@ public abstract class AAccountDecorator extends AAccount {
     public double getBalance() {
         return wrapee.getBalance();
     }
+
+    @Override
+    public Customer getOwner() {
+        return wrapee.getOwner();
+    }
     
 }

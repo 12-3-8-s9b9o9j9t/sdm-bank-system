@@ -59,6 +59,7 @@ public class InterBankPaymentAgencyMediator implements IMediator {
                     transfer.execute();
                 }
             }
+            transfers.clear();
         }
     }
 

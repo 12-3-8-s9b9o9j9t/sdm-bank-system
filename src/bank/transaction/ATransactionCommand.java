@@ -2,9 +2,7 @@ package bank.transaction;
 
 import java.time.LocalDate;
 
-import bank.Bank;
 import bank.IElement;
-import bank.product.Product;
 import bank.reporter.IVisitor;
 
 public abstract class ATransactionCommand implements ICommand, IElement {

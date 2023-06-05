@@ -11,7 +11,6 @@ import java.util.UUID;
 import bank.exception.BankAlreadyRegisteredAtIBPAException;
 import bank.exception.CustomerAlreadyExistsException;
 import bank.exception.InvalidCustomerException;
-import bank.exception.InvalidTransactionException;
 import bank.ibpa.InterBankPaymentAgencyMediator;
 import bank.interest.AInterestStrategy;
 import bank.product.Credit;
