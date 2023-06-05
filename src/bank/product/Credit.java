@@ -25,14 +25,14 @@ public class Credit extends Product implements IChargeable, ISuppliable {
         if (amount > 0 && this.amount + amount <= limit) {
             this.amount += amount;
         } else {
-            throw new InvalidTransactionException("borrow " + amount, getID());
+            throw new InvalidTransactionException("borrow " + amount + "for product " + getID(), "problematic amount");
         }
     }
 
     @Override
     public void supply(double amount) throws InvalidTransactionException {
         if (amount <= 0) {
-            throw new InvalidTransactionException("repay " + amount, getID());
+            throw new InvalidTransactionException("repay " + amount + "for product " + getID(), "problematic amount");
         }
         this.amount -= amount;
     }

@@ -1,12 +1,15 @@
 package bank.ibpa;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
 import bank.Bank;
 import bank.exception.BankAlreadyRegisteredAtIBPAException;
+import bank.exception.InvalidBankException;
+import bank.transaction.transfer.TransferCommand;
 
 public class InterBankPaymentAgencyMediator implements IMediator {
 
@@ -22,14 +25,15 @@ public class InterBankPaymentAgencyMediator implements IMediator {
     }
 
     @Override
-    public void notify(Bank sender, String event) {
+    public void notify(Bank sender, String event) throws Exception {
+        checkBank(sender);
         switch (event) {
-        case "register":
-            if (banks.containsValue(sender)) {
-                throw new BankAlreadyRegisteredAtIBPAException(sender.getName(), name);
-            }
-            registerBank(sender);
-            break;
+            case "register":
+                if (banks.containsValue(sender)) {
+                    throw new BankAlreadyRegisteredAtIBPAException(sender.getName(), name);
+                }
+                registerBank(sender);
+                break;
         }
     }
 
@@ -44,8 +48,24 @@ public class InterBankPaymentAgencyMediator implements IMediator {
         return name.toUpperCase(Locale.ENGLISH) + (random.nextInt() & Integer.MAX_VALUE);
     }
 
-    private void transfer() {
-        // TODO Auto-generated method stub
+    public void transfer() {
+        for (Bank bank : banks.values()) {
+            List<TransferCommand> transfers =  bank.getPendingTransfers(name);
+            for (TransferCommand transfer : transfers) {
+                Bank receiving = banks.get(transfer.getReceivingBankID());
+                if (receiving != null) {
+                    receiving.addPendingTransfer(transfer);
+                } else {
+                    transfer.execute();
+                }
+            }
+        }
+    }
+
+    private void checkBank(Bank bank) throws InvalidBankException {
+        if (!banks.containsValue(bank)) {
+            throw new InvalidBankException(bank.getName());
+        }
     }
 
 }

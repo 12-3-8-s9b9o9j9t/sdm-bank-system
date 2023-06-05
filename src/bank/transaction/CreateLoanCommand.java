@@ -4,6 +4,7 @@ import java.time.Period;
 
 import bank.Bank;
 import bank.Customer;
+import bank.exception.InvalidCustomerException;
 import bank.product.Product;
 import bank.product.account.AAccount;
 
@@ -23,8 +24,12 @@ public class CreateLoanCommand extends ATransactionCommand {
 
     @Override
     public boolean execute() {
-        Product loan = bank.createLoan(owner,account,period,amount);
-        loan.log(this);
-        return true;
+        try {
+            Product loan = bank.createLoan(owner,account,period,amount);
+            loan.log(this);
+            return true;
+        } catch (InvalidCustomerException e) {
+            return false;
+        }
     }
 }

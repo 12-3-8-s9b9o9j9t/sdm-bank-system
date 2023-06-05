@@ -11,25 +11,31 @@ import bank.product.ISuppliable;
 import bank.product.Product;
 import bank.product.account.AAccount;
 import bank.reporter.IVisitor;
+import bank.transaction.ChargeProductCommand;
 import bank.transaction.CloseDepositCommand;
 import bank.transaction.CreateAccountCommand;
 import bank.transaction.CreateCreditCommand;
 import bank.transaction.CreateDepositCommand;
 import bank.transaction.CreateLoanCommand;
 import bank.transaction.ExtendAccountWithDebitCommand;
+import bank.transaction.SupplyProductCommand;
+import bank.transaction.transfer.TransferCommand;
 
 public class Customer implements IElement {
 
     private int ID;
     private String name;
+    private int password;
     private Bank bank;
     private Map<String, Product> products = new HashMap<>();
+    private Map<String, TransferCommand> toAuthorize = new HashMap<>();
 
     // package-private constructor, only Bank can create Customer
-    Customer(int ID, String name, Bank bank) {
+    Customer(int ID, String name, String password, Bank bank) {
         this.ID = ID;
         this.name = name;
         this.bank = bank;
+        this.password = password.hashCode();
     }
 
     public int getID() {
@@ -60,78 +66,99 @@ public class Customer implements IElement {
         return products.remove(product.getID()) != null;
     }
 
-    public void createAcount() {
-        new CreateAccountCommand(bank, this)
+    public void addTransferToAuthorize(TransferCommand transfer) {
+        toAuthorize.put(transfer.getID(), transfer);
+    }
+
+    public boolean createAcount() {
+        return new CreateAccountCommand(bank, this)
             .execute();
     }
 
-    public void createCredit(double limit) {
+    public boolean createCredit(double limit) throws InvalidAmountException {
         checkAmount(limit);
-        new CreateCreditCommand(bank, this, limit)
+        return new CreateCreditCommand(bank, this, limit)
             .execute();
     }
 
-    public void createLoan(AAccount account, Period period, double amount) {
+    public boolean createLoan(AAccount account, Period period, double amount) throws InvalidAmountException, InvalidProductException{
         checkAmount(amount);
         checkProduct(account);
-        new CreateLoanCommand(bank, this, account, period, amount)
+        return new CreateLoanCommand(bank, this, account, period, amount)
             .execute();
     }
 
-    public void createDeposit(AAccount account, Period period, double amount) {
+    public boolean createDeposit(AAccount account, Period period, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
         checkProduct(account);
-        new CreateDepositCommand(bank, this, account, period, amount)
+        return new CreateDepositCommand(bank, this, account, period, amount)
             .execute();
     }
 
-    public void extendAccountWithDebit(AAccount account, double limit) {
+    public boolean extendAccountWithDebit(AAccount account, double limit) throws InvalidAmountException, InvalidProductException {
         checkAmount(limit);
         checkProduct(account);
-        new ExtendAccountWithDebitCommand(bank, this, account, limit)
+        return new ExtendAccountWithDebitCommand(bank, this, account, limit)
             .execute();
     }
 
-    public void closeDeposit(Deposit deposit) {
+    public boolean closeDeposit(Deposit deposit) throws InvalidProductException {
         checkProduct(deposit);
         boolean success = new CloseDepositCommand(deposit)
                 .execute();
         if (success) {
             removeProduct(deposit);
         }
+        return success;
     }
 
-    public void supplyProduct(ISuppliable supplied, double amount) {
+    public boolean supplyProduct(ISuppliable supplied, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
         Product product = (Product)supplied;
         checkProduct(product);
+        return new SupplyProductCommand(supplied, amount)
+            .execute();
     }
 
-    public void chargeProduct(IChargeable charged, double amount) {
+    public boolean chargeProduct(IChargeable charged, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
         Product product = (Product)charged;
         checkProduct(product);
+        return new ChargeProductCommand(charged, amount)
+            .execute();
     }
 
-    public void makeTransfert(AAccount sender, String receiverID, double amount) {
+    public String makeTransfert(AAccount sendingAccount, String receivingAccountID, double amount) throws InvalidAmountException, InvalidProductException {
+        checkAmount(amount);
+        checkProduct(sendingAccount);
+        TransferCommand transfer = new TransferCommand(bank, this, sendingAccount, receivingAccountID, amount);
+        if (transfer.execute()) {
+            return transfer.getID();
+        }
+        return null;
+    }
+
+    public void makeTransfert(AAccount sender, String receiverID, String bankID, String IBPAName,  double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
         checkProduct(sender);
         // TODO
     }
 
-    public void makeTransfert(AAccount sender, String receiverID, String bankID, double amount) {
-        checkAmount(amount);
-        checkProduct(sender);
-        // TODO
+    public boolean authorizeTransfert(String transferID, String password) {
+        TransferCommand transfer = toAuthorize.get(transferID);
+        if (transfer != null && this.password == password.hashCode()) {
+            return transfer.execute();
+        }
+        return false;
     }
 
-    private void checkProduct(Product product) {
+    private void checkProduct(Product product) throws InvalidProductException {
         if(!products.containsKey(product.getID())) {
             throw new InvalidProductException(product.getID());
         }
     }
 
-    private void checkAmount(double amount) {
+    private void checkAmount(double amount) throws InvalidAmountException {
         if (amount <= 0) {
             throw new InvalidAmountException();
         }

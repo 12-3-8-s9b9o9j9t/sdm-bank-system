@@ -7,7 +7,7 @@ import bank.IElement;
 import bank.product.Product;
 import bank.reporter.IVisitor;
 
-public abstract class ATransactionCommand implements IElement {
+public abstract class ATransactionCommand implements ICommand, IElement {
 
     private String type;
     private LocalDate date = LocalDate.now();
@@ -35,11 +35,6 @@ public abstract class ATransactionCommand implements IElement {
     }
 
     abstract public boolean execute();
-
-    protected void log(Bank bank, Product product) {
-        bank.log(this);
-        product.log(this);
-    }
     
     public String accept(IVisitor visitor) {
         return visitor.visitTransaction(this);

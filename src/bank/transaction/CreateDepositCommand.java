@@ -4,6 +4,7 @@ import java.time.Period;
 
 import bank.Bank;
 import bank.Customer;
+import bank.exception.InvalidCustomerException;
 import bank.product.Product;
 import bank.product.account.AAccount;
 
@@ -23,8 +24,12 @@ public class CreateDepositCommand extends ATransactionCommand {
 
     @Override
     public boolean execute() {
-        Product deposit = bank.createDeposit(owner, account, period, amount);
-        deposit.log(this);
-        return true;
+        try {
+            Product deposit = bank.createDeposit(owner, account, period, amount);
+            deposit.log(this);
+            return true;
+        } catch (InvalidCustomerException e) {
+            return false;
+        }
     }
 }

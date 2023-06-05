@@ -25,7 +25,7 @@ public class DebitDecorator extends AAccountDecorator {
     @Override
     public void charge(double amount) throws InvalidTransactionException {
         if (amount <= 0) {
-            throw new InvalidTransactionException("charge " + amount, getID());
+            throw new InvalidTransactionException("charge " + amount + "for product " + getID(), "problematic amount");
         }
         double balance = wrapee.getBalance();
         if (balance >= amount) {
@@ -34,14 +34,14 @@ public class DebitDecorator extends AAccountDecorator {
             overdraft += amount - balance;
             wrapee.charge(balance);
         } else {
-            throw new InvalidTransactionException("charge " + amount, getID());
+            throw new InvalidTransactionException("charge " + amount + "for product " + getID(), "problematic amount");
         }
     }
 
     @Override
     public void supply(double amount) throws InvalidTransactionException {
         if (amount <= 0) {
-            throw new InvalidTransactionException("supply " + amount, getID());
+            throw new InvalidTransactionException("supply " + amount + "for product " + getID(), "problematic amount");
         }
         if (overdraft == 0) {
             wrapee.supply(amount);

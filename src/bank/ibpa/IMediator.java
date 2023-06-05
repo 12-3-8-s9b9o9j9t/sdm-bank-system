@@ -4,5 +4,5 @@ import bank.Bank;
 
 public interface IMediator {
     
-    public void notify(Bank sender, String event);
+    public void notify(Bank sender, String event) throws Exception;
 }

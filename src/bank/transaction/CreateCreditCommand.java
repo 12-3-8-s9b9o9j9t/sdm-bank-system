@@ -2,6 +2,7 @@ package bank.transaction;
 
 import bank.Bank;
 import bank.Customer;
+import bank.exception.InvalidCustomerException;
 import bank.product.Product;
 
 public class CreateCreditCommand extends ATransactionCommand {
@@ -19,9 +20,13 @@ public class CreateCreditCommand extends ATransactionCommand {
 
     @Override
     public boolean execute() {
-        Product credit = bank.createCredit(owner, limit);
-        credit.log(this);
-        return true;
+        try {
+            Product credit = bank.createCredit(owner, limit);
+            credit.log(this);
+            return true;
+        } catch (InvalidCustomerException e) {
+            return false;
+        }
     }
     
 }

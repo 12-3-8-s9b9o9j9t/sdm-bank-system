@@ -2,6 +2,7 @@ package bank.transaction;
 
 import bank.Bank;
 import bank.Customer;
+import bank.exception.InvalidCustomerException;
 import bank.product.account.AAccount;
 
 public class ExtendAccountWithDebitCommand extends ATransactionCommand {
@@ -21,9 +22,13 @@ public class ExtendAccountWithDebitCommand extends ATransactionCommand {
     
     @Override
     public boolean execute() {
-        bank.extendAccountWithDebit(owner, account, limit);
-        account.log(this);
-        return true;
+        try {
+            bank.extendAccountWithDebit(owner, account, limit);
+            account.log(this);
+            return true;
+        } catch (InvalidCustomerException e) {
+            return false;
+        }
     }
     
 }

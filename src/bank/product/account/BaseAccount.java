@@ -26,7 +26,7 @@ public class BaseAccount extends AAccount {
     @Override
     public void charge(double amount) throws InvalidTransactionException {
         if (amount <= 0 || this.balance < amount) {
-            throw new InvalidTransactionException("charge " + amount, getID());
+            throw new InvalidTransactionException("charge " + amount + "for product " + getID(), "problematic amount");
         }
         this.balance -= amount;
     }
@@ -34,7 +34,7 @@ public class BaseAccount extends AAccount {
     @Override
     public void supply(double amount) throws InvalidTransactionException {
         if (amount <= 0) {
-            throw new InvalidTransactionException("supply " + amount, getID());
+            throw new InvalidTransactionException("supply " + amount + "for product " + getID(), "problematic amount");
         }
         this.balance += amount;
     }
