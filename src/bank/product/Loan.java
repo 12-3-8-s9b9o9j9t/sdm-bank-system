@@ -5,7 +5,8 @@ import java.time.Period;
 
 import bank.Bank;
 import bank.exception.InvalidTransactionException;
-import bank.interest.AInterestState;
+import bank.interest.AInterestStrategy;
+import bank.interest.FixedInterestStrategy;
 import bank.product.account.AAccount;
 import bank.transaction.ChargeProductCommand;
 import bank.transaction.SupplyProductCommand;
@@ -24,6 +25,7 @@ public class Loan extends Product implements ISuppliable {
         this.amount = amount;
         new SupplyProductCommand(account, amount)
             .execute();
+        setInterest(new FixedInterestStrategy());
     }
 
     @Override
@@ -35,6 +37,17 @@ public class Loan extends Product implements ISuppliable {
         else {
             throw new InvalidTransactionException("repay " + amount, getID());
         }
+    }
+
+    @Override
+    public double getBalance() {
+        return amount;
+    }
+
+    @Override
+    public void calculateInterest() {
+        amount += getInterest()
+            .calculate(this);
     }
     
 }

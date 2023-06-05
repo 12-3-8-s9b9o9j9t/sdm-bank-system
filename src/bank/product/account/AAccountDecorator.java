@@ -1,5 +1,7 @@
 package bank.product.account;
 
+import bank.Customer;
+
 public abstract class AAccountDecorator extends AAccount {
     protected AAccount wrapee;
 
@@ -9,8 +11,14 @@ public abstract class AAccountDecorator extends AAccount {
         this.setHistory(wrapee.getHistory());
     }
 
+    @Override
     public String getID() {
         return wrapee.getID();
+    }
+
+    @Override
+    public double getBalance() {
+        return wrapee.getBalance();
     }
     
 }

@@ -24,6 +24,10 @@ public abstract class ATransactionCommand {
         this.description = description;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
     abstract public boolean execute();
     
 }

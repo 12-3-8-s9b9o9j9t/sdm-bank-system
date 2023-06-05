@@ -1,5 +1,6 @@
 package bank.transaction;
 
+import bank.exception.InvalidTransactionException;
 import bank.product.Deposit;
 
 public class CloseDepositCommand extends ATransactionCommand {
@@ -13,7 +14,12 @@ public class CloseDepositCommand extends ATransactionCommand {
 
     @Override
     public boolean execute() {
-        deposit.close();
+        try {
+            deposit.close();
+        } catch (InvalidTransactionException e) {
+            setDescription(getDescription() + " : Failed");
+            return false;
+        }
         deposit.log(this);
         return true;
     }

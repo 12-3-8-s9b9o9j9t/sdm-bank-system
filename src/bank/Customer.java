@@ -94,8 +94,11 @@ public class Customer {
 
     public void closeDeposit(Deposit deposit) {
         checkProduct(deposit);
-        new CloseDepositCommand(deposit)
+        boolean success = new CloseDepositCommand(deposit)
                 .execute();
+        if (success) {
+            removeProduct(deposit);
+        }
     }
 
     public void supplyProduct(ISuppliable supplied, double amount) {

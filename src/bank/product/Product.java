@@ -3,9 +3,10 @@ package bank.product;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import bank.Bank;
-import bank.interest.AInterestState;
+import bank.interest.AInterestStrategy;
 import bank.transaction.ATransactionCommand;
 
 public abstract class Product {
@@ -14,11 +15,19 @@ public abstract class Product {
     private Bank bank;
     private List<ATransactionCommand> history = new LinkedList<>();
     private LocalDate creationDate = LocalDate.now();
-    private AInterestState interestState;
+    private AInterestStrategy interestStrategy;
 
     public Product(String ID, Bank bank) {
         this.ID = ID;
         this.bank = bank;
+    }
+
+    public AInterestStrategy getInterest() {
+        return interestStrategy;
+    }
+
+    public void setInterest(AInterestStrategy strategy) {
+        interestStrategy = strategy;
     }
 
     public LocalDate getCreationDate() {
@@ -27,6 +36,22 @@ public abstract class Product {
 
     public List<ATransactionCommand> getHistory() {
         return history;
+    }
+
+    public List<ATransactionCommand> getHistory(LocalDate fromDate) {
+        List<ATransactionCommand> result = new LinkedList<>();
+        ListIterator<ATransactionCommand> li = history.listIterator(history.size());
+        while (li.hasPrevious()) {
+            ATransactionCommand transaction = (ATransactionCommand) li.previous();
+            if (transaction.getDate()
+                .isAfter(fromDate)) {
+                result.add(0, transaction);
+            }
+            else {
+                break;
+            }
+        }
+        return result;
     }
 
     protected void setHistory(List<ATransactionCommand> history) {
@@ -41,17 +66,12 @@ public abstract class Product {
         return bank;
     }
 
+    public abstract double getBalance();
+
     public void log(ATransactionCommand transaction) {
         bank.log(transaction);
         history.add(transaction);
     }
-
-    public void setInterest(AInterestState state) {
-        interestState = state;
-    }
-
-    /*
-    public double calculateInterest(LocalDate starDate, LocalDate endDate) {
-        return interestState.calculate(starDate, endDate);
-    }*/
+    
+    public abstract void calculateInterest();
 }

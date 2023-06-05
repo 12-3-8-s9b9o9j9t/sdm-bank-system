@@ -3,7 +3,8 @@ package bank.product.account;
 import bank.Bank;
 import bank.Customer;
 import bank.exception.InvalidTransactionException;
-import bank.interest.AInterestState;
+import bank.interest.AInterestStrategy;
+import bank.interest.FixedInterestStrategy;
 
 public class BaseAccount extends AAccount {
 
@@ -13,6 +14,7 @@ public class BaseAccount extends AAccount {
     public BaseAccount(String ID, Bank bank, Customer owner) {
         super(ID, bank);
         this.owner = owner;
+        setInterest(new FixedInterestStrategy(AInterestStrategy.LOW_RATE));
     }
 
     @Override
@@ -34,6 +36,12 @@ public class BaseAccount extends AAccount {
             throw new InvalidTransactionException("supply " + amount, getID());
         }
         this.balance += amount;
+    }
+
+    @Override
+    public void calculateInterest() {
+        this.balance += getInterest()
+            .calculate(this);
     }
 
 }

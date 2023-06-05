@@ -48,4 +48,9 @@ public class DebitDecorator extends AAccountDecorator {
         }
     }
 
+    @Override
+    public void calculateInterest() {
+        wrapee.calculateInterest();
+    }
+
 }

@@ -2,6 +2,7 @@ package bank.product;
 
 import bank.Bank;
 import bank.exception.InvalidTransactionException;
+import bank.interest.HistoryBasedStrategy;
 
 public class Credit extends Product implements IChargeable, ISuppliable {
     
@@ -11,6 +12,7 @@ public class Credit extends Product implements IChargeable, ISuppliable {
     public Credit(String ID, Bank bank,  double limit) {
         super(ID, bank);
         this.limit = limit;
+        setInterest(new HistoryBasedStrategy());
     }
 
     @Override
@@ -28,6 +30,17 @@ public class Credit extends Product implements IChargeable, ISuppliable {
             throw new InvalidTransactionException("repay " + amount, getID());
         }
         this.amount -= amount;
+    }
+
+    @Override
+    public double getBalance() {
+        return amount;
+    }
+
+    @Override
+    public void calculateInterest() {
+        amount += getInterest()
+            .calculate(this);   
     }
 
 }

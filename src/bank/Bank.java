@@ -3,16 +3,16 @@ package bank;
 import java.time.Period;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 import bank.exception.BankAlreadyRegisteredAtIBPAException;
 import bank.exception.CustomerAlreadyExistsException;
 import bank.exception.InvalidCustomerException;
 import bank.ibpa.InterBankPaymentAgencyMediator;
-import bank.interest.AInterestState;
+import bank.interest.AInterestStrategy;
 import bank.product.Credit;
 import bank.product.Deposit;
 import bank.product.Loan;
@@ -21,6 +21,7 @@ import bank.product.account.AAccount;
 import bank.product.account.BaseAccount;
 import bank.product.account.DebitDecorator;
 import bank.transaction.ATransactionCommand;
+import bank.transaction.CalculateInterestCommand;
 import bank.transaction.ChangeInterestCommand;
 
 public class Bank {
@@ -104,11 +105,20 @@ public class Bank {
         return debit;
     }
 
-    public void changeInterest(int customerID, String productID, AInterestState state) {
+    public void changeInterest(int customerID, String productID, AInterestStrategy state) {
         Customer customer = customers.get(customerID);
         Product product = customer.getProduct(productID);
         new ChangeInterestCommand(product, state)
             .execute();
+    }
+
+    public void calculateInterest() {
+        for (Customer customer : customers.values()) {
+            for (Product product : customer.getProducts().values()) {
+                new CalculateInterestCommand(product)
+                    .execute();
+            }
+        }
     }
 
     private void checkCustomer(Customer owner) {
