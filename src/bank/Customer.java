@@ -1,8 +1,6 @@
 package bank;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import bank.exception.InvalidAmountException;
@@ -18,9 +16,6 @@ import bank.transaction.CreateCreditCommand;
 import bank.transaction.CreateDepositCommand;
 import bank.transaction.CreateLoanCommand;
 import bank.transaction.ExtendAccountWithDebitCommand;
-import bank.transaction.SupplyProductCommand;
-import bank.transaction.TransferCommand;
-import bank.transaction.ChargeProductCommand;
 
 public class Customer {
 
@@ -111,6 +106,16 @@ public class Customer {
         checkAmount(amount);
         Product product = (Product)charged;
         checkProduct(product);
+    }
+
+    public void makeTransfert(AAccount sender, String receiverID, double amount) {
+        checkAmount(amount);
+        checkProduct(sender);
+    }
+
+    public void makeTransfert(AAccount sender, String receiverID, String bankID, double amount) {
+        checkAmount(amount);
+        checkProduct(sender);
     }
 
     private void checkProduct(Product product) {
