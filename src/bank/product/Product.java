@@ -7,9 +7,11 @@ import java.util.ListIterator;
 
 import bank.Bank;
 import bank.interest.AInterestStrategy;
+import bank.IElement;
+import bank.reporter.IVisitor;
 import bank.transaction.ATransactionCommand;
 
-public abstract class Product {
+public abstract class Product implements IElement {
     
     private String ID; // given by the bank
     private Bank bank;
@@ -74,4 +76,6 @@ public abstract class Product {
     }
     
     public abstract void calculateInterest();
+
+    public abstract String accept(IVisitor visitor);
 }

@@ -10,6 +10,7 @@ import bank.product.IChargeable;
 import bank.product.ISuppliable;
 import bank.product.Product;
 import bank.product.account.AAccount;
+import bank.reporter.IVisitor;
 import bank.transaction.CloseDepositCommand;
 import bank.transaction.CreateAccountCommand;
 import bank.transaction.CreateCreditCommand;
@@ -17,7 +18,7 @@ import bank.transaction.CreateDepositCommand;
 import bank.transaction.CreateLoanCommand;
 import bank.transaction.ExtendAccountWithDebitCommand;
 
-public class Customer {
+public class Customer implements IElement {
 
     private int ID;
     private String name;
@@ -33,6 +34,10 @@ public class Customer {
 
     public int getID() {
         return ID;
+    }
+
+    public String getName() {
+        return name;
     }
 
     Bank getBank() {
@@ -128,6 +133,11 @@ public class Customer {
         if (amount <= 0) {
             throw new InvalidAmountException();
         }
+    }
+
+    @Override
+    public String accept(IVisitor visitor) {
+        return visitor.visitCustomer(this);
     }
     
 }

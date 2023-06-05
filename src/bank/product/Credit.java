@@ -3,6 +3,7 @@ package bank.product;
 import bank.Bank;
 import bank.exception.InvalidTransactionException;
 import bank.interest.HistoryBasedStrategy;
+import bank.reporter.IVisitor;
 
 public class Credit extends Product implements IChargeable, ISuppliable {
     
@@ -13,6 +14,10 @@ public class Credit extends Product implements IChargeable, ISuppliable {
         super(ID, bank);
         this.limit = limit;
         setInterest(new HistoryBasedStrategy());
+    }
+
+    public double getLimit() {
+        return limit;
     }
 
     @Override
@@ -43,4 +48,8 @@ public class Credit extends Product implements IChargeable, ISuppliable {
             .calculate(this);   
     }
 
+    @Override
+    public String accept(IVisitor visitor) {
+        return visitor.visitCredit(this);
+    }
 }

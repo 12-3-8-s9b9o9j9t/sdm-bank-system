@@ -10,6 +10,7 @@ import bank.interest.FixedInterestStrategy;
 import bank.product.account.AAccount;
 import bank.transaction.ChargeProductCommand;
 import bank.transaction.SupplyProductCommand;
+import bank.reporter.IVisitor;
 
 public class Loan extends Product implements ISuppliable {
 
@@ -26,6 +27,14 @@ public class Loan extends Product implements ISuppliable {
         new SupplyProductCommand(account, amount)
             .execute();
         setInterest(new FixedInterestStrategy());
+    }
+
+    public AAccount getAccount() {
+        return account;
+    }
+
+    public LocalDate getTargetDate() {
+        return targetDate;
     }
 
     @Override
@@ -49,5 +58,9 @@ public class Loan extends Product implements ISuppliable {
         amount += getInterest()
             .calculate(this);
     }
-    
+
+    @Override
+    public String accept(IVisitor visitor) {
+        return visitor.visitLoan(this);
+    }
 }

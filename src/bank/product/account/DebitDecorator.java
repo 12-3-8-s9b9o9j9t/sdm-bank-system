@@ -1,6 +1,7 @@
 package bank.product.account;
 
 import bank.exception.InvalidTransactionException;
+import bank.reporter.IVisitor;
 
 public class DebitDecorator extends AAccountDecorator {
     
@@ -10,6 +11,10 @@ public class DebitDecorator extends AAccountDecorator {
     public DebitDecorator(AAccount wrapee, double limit) {
         super(wrapee);
         this.limit = limit;
+    }
+
+    public double getOverdraft() {
+        return overdraft;
     }
 
     @Override
@@ -53,4 +58,8 @@ public class DebitDecorator extends AAccountDecorator {
         wrapee.calculateInterest();
     }
 
+    @Override
+    public String accept(IVisitor visitor) {
+        return visitor.visitDebitAccount(this);
+    }
 }

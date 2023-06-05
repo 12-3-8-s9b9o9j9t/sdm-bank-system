@@ -5,6 +5,7 @@ import bank.Customer;
 import bank.exception.InvalidTransactionException;
 import bank.interest.AInterestStrategy;
 import bank.interest.FixedInterestStrategy;
+import bank.reporter.IVisitor;
 
 public class BaseAccount extends AAccount {
 
@@ -44,4 +45,8 @@ public class BaseAccount extends AAccount {
             .calculate(this);
     }
 
+    @Override
+    public String accept(IVisitor visitor) {
+        return visitor.visitBaseAccount(this);        
+    }
 }

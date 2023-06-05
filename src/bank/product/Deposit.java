@@ -11,6 +11,7 @@ import bank.product.account.AAccount;
 import bank.transaction.CalculateInterestCommand;
 import bank.transaction.ChargeProductCommand;
 import bank.transaction.SupplyProductCommand;
+import bank.reporter.IVisitor;
 
 public class Deposit extends Product implements ISuppliable {
 
@@ -26,6 +27,18 @@ public class Deposit extends Product implements ISuppliable {
         this.account = account;
         this.limit = limit;
         setInterest(new FixedInterestStrategy(AInterestStrategy.HIGH_RATE));
+    }
+
+    public AAccount getAccount() {
+        return account;
+    }
+
+    public LocalDate getTargetDate() {
+        return targetDate;
+    }
+
+    public double getLimit() {
+        return limit;
     }
 
     @Override
@@ -64,4 +77,8 @@ public class Deposit extends Product implements ISuppliable {
         }   
     }
 
+    @Override
+    public String accept(IVisitor visitor) {
+        return visitor.visitDeposit(this);
+    }
 }

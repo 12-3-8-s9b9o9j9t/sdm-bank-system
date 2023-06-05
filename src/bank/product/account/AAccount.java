@@ -1,8 +1,6 @@
 package bank.product.account;
 
 import bank.Bank;
-import bank.Customer;
-import bank.exception.InvalidTransactionException;
 import bank.product.IChargeable;
 import bank.product.ISuppliable;
 import bank.product.Product;
