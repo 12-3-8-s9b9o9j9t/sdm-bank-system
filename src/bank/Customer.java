@@ -116,11 +116,13 @@ public class Customer implements IElement {
     public void makeTransfert(AAccount sender, String receiverID, double amount) {
         checkAmount(amount);
         checkProduct(sender);
+        // TODO
     }
 
     public void makeTransfert(AAccount sender, String receiverID, String bankID, double amount) {
         checkAmount(amount);
         checkProduct(sender);
+        // TODO
     }
 
     private void checkProduct(Product product) {
