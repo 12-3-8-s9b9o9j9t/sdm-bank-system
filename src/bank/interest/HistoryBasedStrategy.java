@@ -5,8 +5,6 @@ import java.util.List;
 
 import bank.product.Product;
 import bank.transaction.ATransactionCommand;
-import bank.transaction.ChargeProductCommand;
-import bank.transaction.SupplyProductCommand;
 
 public class HistoryBasedStrategy extends AInterestStrategy {
 
@@ -28,13 +26,16 @@ public class HistoryBasedStrategy extends AInterestStrategy {
         double modifier = 1;
         List<ATransactionCommand> history = product.getHistory(getLastCalculationDate());
 
-        for (ATransactionCommand transaction : history) {
-            if (transaction instanceof SupplyProductCommand) {
-                modifier *= 0.9;
-            }
-            else if (transaction instanceof ChargeProductCommand) {
-                modifier *= 1.1;
-            }
+        double valueChange = 0;
+
+        for (ATransactionCommand command : history) {
+            valueChange += command.getValue();
+        }
+
+        if (valueChange < 0) {
+            modifier = 1.2;
+        } else if (valueChange > 0) {
+            modifier = 0.8;
         }
 
         LocalDate now = LocalDate.now();

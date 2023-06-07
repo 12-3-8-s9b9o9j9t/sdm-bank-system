@@ -26,4 +26,9 @@ public class CreateAccountCommand extends ATransactionCommand {
             return false;
         }
     }
+
+    @Override
+    public double getValue() {
+        return 0;
+    }
 }

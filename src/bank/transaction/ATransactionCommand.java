@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import bank.IElement;
 import bank.reporter.IVisitor;
 
-public abstract class ATransactionCommand implements ICommand, IElement {
+public abstract class ATransactionCommand implements ICommand, IElement, IValuable {
 
     private String type;
     private LocalDate date = LocalDate.now();
@@ -31,8 +31,6 @@ public abstract class ATransactionCommand implements ICommand, IElement {
     protected void setDescription(String description) {
         this.description = description;
     }
-
-    abstract public boolean execute();
     
     public String accept(IVisitor visitor) {
         return visitor.visitTransaction(this);

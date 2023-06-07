@@ -8,12 +8,18 @@ public class VerifyAmountState extends ATransferState {
 
     @Override
     public boolean execute() {
-        if (getContext().getAmount() > getContext().getSendingAccount().getBalance()) {
+        TransferCommand context = getContext();
+        if (context.getAmount() > context.getSendingAccount().getBalance()) {
             return false;
         }
-        getContext().changeState(new WaitAuthorizationState(getContext()));
-        getContext().getSender().addTransferToAuthorize(getContext());
+        context.changeState(new WaitAuthorizationState(context))
+            .getSender().addTransferToAuthorize(context);
         return true;
+    }
+
+    @Override
+    public double getValue() {
+        return 0;
     }
 
 }

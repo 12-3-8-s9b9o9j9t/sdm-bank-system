@@ -11,29 +11,43 @@ public class TransferCommand extends ATransactionCommand {
 
     private Bank senderBank;
     private Customer sender;
-    private String ID = generateID();
+    private String ID;
     private AAccount sendingAccount;
     private String receivingAccountID;
     private AAccount receivingAccount = null;
     private String receivingBankID = null;
     private String IBPAName = null;
     private double amount;
-
     private ATransferState state;
 
     public TransferCommand(Bank senderBank, Customer sender, AAccount sendingAccount, String receivingAccountID, double amount) {
         super("Transfer", "Transfering");
         this.senderBank = senderBank;
         this.sender = sender;
+        this.ID = generateID();
         this.sendingAccount = sendingAccount;
         this.receivingAccountID = receivingAccountID;
         this.amount = amount;
+        this.state = new VerifyAmountState(this);
     }
 
     public TransferCommand(Bank senderBank, Customer sender, AAccount sendingAccount, String receivingAccountID, String receivingBankID, String IBPAName, double amount) {
         this(senderBank, sender, sendingAccount, receivingAccountID, amount);
         this.receivingBankID = receivingBankID;
         this.IBPAName = IBPAName;
+    }
+
+    private TransferCommand(Bank senderBank, Customer sender, String ID, AAccount sendingAccount, String receivingAccountID, AAccount receivingAccount, String receivingBankID, String IBPAName, double amount) {
+        super("Transfer", "Transfering");
+        this.senderBank = senderBank;
+        this.sender = sender;
+        this.ID = ID;
+        this.sendingAccount = sendingAccount;
+        this.receivingAccountID = receivingAccountID;
+        this.receivingAccount = receivingAccount;
+        this.receivingBankID = receivingBankID;
+        this.IBPAName = IBPAName;
+        this.amount = amount;
     }
 
     public String getID() {
@@ -90,14 +104,24 @@ public class TransferCommand extends ATransactionCommand {
         return true;
     }
 
-    public void changeState(ATransferState state) {
+    @Override
+    public double getValue() {
+        return state.getValue();
+    }
+
+    public TransferCommand changeState(ATransferState state) {
         this.state = state;
+        return this;
     }
 
     private String generateID() {
         return UUID.randomUUID()
                 .toString()
                 .replaceAll("-", "");
+    }
+
+    TransferCommand copy() {
+        return new TransferCommand(senderBank, sender, ID, sendingAccount, receivingAccountID, receivingAccount, receivingBankID, IBPAName, amount);
     }
 
 }

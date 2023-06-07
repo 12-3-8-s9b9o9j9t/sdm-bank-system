@@ -5,6 +5,7 @@ import bank.product.Product;
 public class CalculateInterestCommand extends ATransactionCommand {
 
     private Product product;
+    private double value = 0;
 
     public CalculateInterestCommand(Product product) {
         super("Calculate Interest", "Calculating Interest");
@@ -13,10 +14,14 @@ public class CalculateInterestCommand extends ATransactionCommand {
 
     @Override
     public boolean execute() {
-        product.calculateInterest();
+        value = product.calculateInterest();
         product.log(this);
         return true;
     }
 
+    @Override
+    public double getValue() {
+        return value;
+    }
 
 }

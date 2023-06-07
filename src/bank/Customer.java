@@ -2,6 +2,7 @@ package bank;
 import java.time.Period;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import bank.exception.InvalidAmountException;
 import bank.exception.InvalidProductException;
@@ -18,6 +19,7 @@ import bank.transaction.CreateCreditCommand;
 import bank.transaction.CreateDepositCommand;
 import bank.transaction.CreateLoanCommand;
 import bank.transaction.ExtendAccountWithDebitCommand;
+import bank.transaction.ReportCommand;
 import bank.transaction.SupplyProductCommand;
 import bank.transaction.transfer.TransferCommand;
 
@@ -138,11 +140,27 @@ public class Customer implements IElement {
         return null;
     }
 
-    public void makeTransfert(AAccount sender, String receiverID, String bankID, String IBPAName,  double amount) throws InvalidAmountException, InvalidProductException {
+    public String makeTransfert(AAccount sendingAccount, String receivingAccountID, String bankID, String IBPAName, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
-        checkProduct(sender);
-        // TODO
+        checkProduct(sendingAccount);
+        TransferCommand transfer = new TransferCommand(bank, this, sendingAccount, receivingAccountID, bankID, IBPAName, amount);
+        if (transfer.execute()) {
+            return transfer.getID();
+        }
+        return null;
     }
+
+    public String report() {
+        return report(null);
+    }
+
+    public String report(Predicate<Product> filter) {
+        String buffer = null;
+        new ReportCommand(buffer, filter)
+            .execute();
+        return buffer;
+    }
+
 
     public boolean authorizeTransfert(String transferID, String password) {
         TransferCommand transfer = toAuthorize.get(transferID);

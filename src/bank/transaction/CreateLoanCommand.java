@@ -32,4 +32,10 @@ public class CreateLoanCommand extends ATransactionCommand {
             return false;
         }
     }
+
+    @Override
+    public double getValue() {
+        return -amount;
+    }
+    
 }

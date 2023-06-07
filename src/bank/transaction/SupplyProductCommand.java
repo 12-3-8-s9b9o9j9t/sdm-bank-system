@@ -31,4 +31,9 @@ public class SupplyProductCommand extends ATransactionCommand {
         return success;
     }
 
+    @Override
+    public double getValue() {
+        return amount;
+    }
+
 }

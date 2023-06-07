@@ -14,12 +14,18 @@ public class WaitAuthorizationState extends ATransferState {
 
     @Override
     public boolean execute() {
+        TransferCommand context = getContext();
         if (LocalTime.now().isAfter(time.plusMinutes(MAX_TIME))) {
             return false;
         }
-        getContext().changeState(new WaitReceivingAccountState(getContext()));
-        getContext().getSenderBank().addPendingTransfer(getContext());
+        context.changeState(new WaitReceivingAccountState(context))
+            .getSenderBank().addPendingTransfer(context);
         return true;
+    }
+
+    @Override
+    public double getValue() {
+        return 0;
     }
     
 }

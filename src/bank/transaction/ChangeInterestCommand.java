@@ -20,5 +20,10 @@ public class ChangeInterestCommand extends ATransactionCommand {
         product.log(this);
         return true;
     }
+
+    @Override
+    public double getValue() {
+        return 0;
+    }
     
 }

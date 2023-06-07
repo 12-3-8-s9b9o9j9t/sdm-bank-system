@@ -43,9 +43,11 @@ public class Credit extends Product implements IChargeable, ISuppliable {
     }
 
     @Override
-    public void calculateInterest() {
-        amount += getInterest()
-            .calculate(this);   
+    public double calculateInterest() {
+        double interest = getInterest()
+            .calculate(this);
+        amount += interest;
+        return -interest;
     }
 
     @Override

@@ -14,9 +14,9 @@ public class CreateDepositCommand extends ATransactionCommand {
     private AAccount account;
     private Bank bank;
     private Period period;
-    private double amount;
+    private double limit;
 
-    public CreateDepositCommand(Bank bank, Customer owner, AAccount account, Period period, double amount) {
+    public CreateDepositCommand(Bank bank, Customer owner, AAccount account, Period period, double limit) {
         super("Create Deposit", "Creating Deposit");
         this.account = account;
         this.bank = bank;
@@ -25,11 +25,16 @@ public class CreateDepositCommand extends ATransactionCommand {
     @Override
     public boolean execute() {
         try {
-            Product deposit = bank.createDeposit(owner, account, period, amount);
+            Product deposit = bank.createDeposit(owner, account, period, limit);
             deposit.log(this);
             return true;
         } catch (InvalidCustomerException e) {
             return false;
         }
+    }
+
+    @Override
+    public double getValue() {
+        return 0;
     }
 }

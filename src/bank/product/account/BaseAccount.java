@@ -45,9 +45,11 @@ public class BaseAccount extends AAccount {
     }
 
     @Override
-    public void calculateInterest() {
-        this.balance += getInterest()
+    public double calculateInterest() {
+        double interest = getInterest()
             .calculate(this);
+        this.balance += interest;
+        return interest;
     }
 
     @Override

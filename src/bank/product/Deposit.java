@@ -69,12 +69,15 @@ public class Deposit extends Product implements ISuppliable {
     }
 
     @Override
-    public void calculateInterest() {
+    public double calculateInterest() {
+        double interest = 0;
         if (LocalDate.now()
             .isAfter(targetDate)) {
-            amount += getInterest()
+            interest = getInterest()
                 .calculate(this);
-        }   
+            amount += interest;
+        }
+        return interest;
     }
 
     @Override

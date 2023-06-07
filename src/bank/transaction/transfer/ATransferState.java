@@ -1,8 +1,9 @@
 package bank.transaction.transfer;
 
 import bank.transaction.ICommand;
+import bank.transaction.IValuable;
 
-public abstract class ATransferState implements ICommand {
+public abstract class ATransferState implements ICommand, IValuable {
 
     private TransferCommand context;
 
@@ -13,7 +14,5 @@ public abstract class ATransferState implements ICommand {
     protected TransferCommand getContext() {
         return context;
     }
-
-    abstract public boolean execute();
     
 }

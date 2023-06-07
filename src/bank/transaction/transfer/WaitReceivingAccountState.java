@@ -20,12 +20,19 @@ public class WaitReceivingAccountState extends ATransferState {
             AAccount sending = context.getSendingAccount();
             AAccount receiving = context.getReceivingAccount();
             sending.charge(amount);
-            sending.log(context);
+            TransferCommand sent = context.copy();
+            sending.log(sent.changeState(new TransferSentState(sent)));
             receiving.supply(amount);
-            receiving.log(context);
+            TransferCommand received = context.copy();
+            receiving.log(received.changeState(new TransferReceivedState(received)));
         } catch (Exception e) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public double getValue() {
+        return 0;
     }
 }

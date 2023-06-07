@@ -1,5 +1,5 @@
 package bank.transaction;
 
 public interface ICommand {
-    boolean execute();
+    public boolean execute();
 }

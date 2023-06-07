@@ -30,5 +30,9 @@ public class ChargeProductCommand extends ATransactionCommand {
         return success;
     }
 
+    @Override
+    public double getValue() {
+        return -amount;
+    }
 
 }

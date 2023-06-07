@@ -24,4 +24,9 @@ public class CloseDepositCommand extends ATransactionCommand {
         return true;
     }
 
+    @Override
+    public double getValue() {
+        return 0;
+    }
+
 }

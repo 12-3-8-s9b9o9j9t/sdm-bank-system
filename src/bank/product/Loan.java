@@ -53,9 +53,11 @@ public class Loan extends Product implements ISuppliable {
     }
 
     @Override
-    public void calculateInterest() {
-        amount += getInterest()
+    public double calculateInterest() {
+        double interest = getInterest()
             .calculate(this);
+        amount += interest;
+        return -interest;
     }
 
     @Override

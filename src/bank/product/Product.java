@@ -75,7 +75,7 @@ public abstract class Product implements IElement {
         history.add(transaction);
     }
     
-    public abstract void calculateInterest();
+    public abstract double calculateInterest();
 
     public abstract String accept(IVisitor visitor);
 }
