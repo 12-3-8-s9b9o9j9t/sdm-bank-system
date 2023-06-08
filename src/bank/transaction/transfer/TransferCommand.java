@@ -21,7 +21,13 @@ public class TransferCommand extends ATransactionCommand {
     private ATransferState state;
 
     public TransferCommand(Bank senderBank, Customer sender, AAccount sendingAccount, String receivingAccountID, double amount) {
-        super("Transfer", "Transfering");
+        super("Transfer",
+            new StringBuilder("Transfering ")
+                    .append(amount)
+                    .append(" from Account ")
+                    .append(sendingAccount.getID())
+                    .append(" to Account ")
+                    .append(receivingAccountID).toString());
         this.senderBank = senderBank;
         this.sender = sender;
         this.ID = generateID();
@@ -32,22 +38,38 @@ public class TransferCommand extends ATransactionCommand {
     }
 
     public TransferCommand(Bank senderBank, Customer sender, AAccount sendingAccount, String receivingAccountID, String receivingBankID, String IBPAName, double amount) {
-        this(senderBank, sender, sendingAccount, receivingAccountID, amount);
+        super("Transfer",
+            new StringBuilder("Transfering ")
+                    .append(amount)
+                    .append(" from Account ")
+                    .append(sendingAccount.getID())
+                    .append(" to Account ")
+                    .append(receivingAccountID)
+                    .append(" at Bank ")
+                    .append(receivingBankID)
+                    .append(" with IBPA ")
+                    .append(IBPAName).toString());
+        this.senderBank = senderBank;
+        this.sender = sender;
+        this.ID = generateID();
+        this.sendingAccount = sendingAccount;
+        this.receivingAccountID = receivingAccountID;
+        this.amount = amount;
         this.receivingBankID = receivingBankID;
         this.IBPAName = IBPAName;
     }
 
-    private TransferCommand(Bank senderBank, Customer sender, String ID, AAccount sendingAccount, String receivingAccountID, AAccount receivingAccount, String receivingBankID, String IBPAName, double amount) {
-        super("Transfer", "Transfering");
-        this.senderBank = senderBank;
-        this.sender = sender;
-        this.ID = ID;
-        this.sendingAccount = sendingAccount;
-        this.receivingAccountID = receivingAccountID;
-        this.receivingAccount = receivingAccount;
-        this.receivingBankID = receivingBankID;
-        this.IBPAName = IBPAName;
-        this.amount = amount;
+    private TransferCommand(TransferCommand toCopy) {
+        super("Transfer",
+            toCopy.getDescription());
+        this.senderBank = toCopy.senderBank;
+        this.sender = toCopy.sender;
+        this.ID = toCopy.ID;
+        this.sendingAccount = toCopy.sendingAccount;
+        this.receivingAccountID = toCopy.receivingAccountID;
+        this.amount = toCopy.amount;
+        this.receivingBankID = toCopy.receivingBankID;
+        this.IBPAName = toCopy.IBPAName;
     }
 
     public String getID() {
@@ -97,7 +119,7 @@ public class TransferCommand extends ATransactionCommand {
     @Override
     public boolean execute() {
         if (!state.execute()) {
-            setDescription(getDescription() + " : Failed");
+            setDescription(getDescription() + ": Failed");
             sendingAccount.log(this);
             return false;
         }
@@ -121,7 +143,7 @@ public class TransferCommand extends ATransactionCommand {
     }
 
     TransferCommand copy() {
-        return new TransferCommand(senderBank, sender, ID, sendingAccount, receivingAccountID, receivingAccount, receivingBankID, IBPAName, amount);
+        return new TransferCommand(this);
     }
 
 }

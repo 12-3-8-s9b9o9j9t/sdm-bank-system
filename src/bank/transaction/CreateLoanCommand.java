@@ -17,7 +17,13 @@ public class CreateLoanCommand extends ATransactionCommand {
     private double amount;
 
     public CreateLoanCommand(Bank bank, Customer owner, AAccount account, Period period, double amount) {
-        super("Create Loan", "Creating Loan");
+        super("Create Loan", 
+            new StringBuilder("Creating Loan of ")
+            .append(amount)
+            .append(" linked to Account ")
+            .append(account.getID())
+            .append(" to be reinbursed before ")
+            .append(period.toString()).toString());
         this.account = account;
         this.bank = bank;
     }

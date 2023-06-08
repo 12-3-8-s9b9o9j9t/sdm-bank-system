@@ -9,7 +9,11 @@ public class ChangeInterestCommand extends ATransactionCommand {
     private AInterestStrategy state;
 
     public ChangeInterestCommand(Product product, AInterestStrategy state) {
-        super("Set Interest", "Setting Interest");
+        super("Set Interest",
+            new StringBuilder("Changing Interest Mechanism for Product ")
+            .append(product.getID())
+            .append(" to ")
+            .append(state.getClass().getSimpleName()).toString());
         this.product = product;
         this.state = state;
     }

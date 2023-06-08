@@ -13,7 +13,11 @@ public class ExtendAccountWithDebitCommand extends ATransactionCommand {
     private double limit;
 
     public ExtendAccountWithDebitCommand(Bank bank, Customer owner, AAccount account, double limit) {
-        super("Extend Account With Debit", "Extending Account With Debit");
+        super("Extend Account With Debit", 
+            new StringBuilder("Extending Account ")
+            .append(account.getID())
+            .append(" with Debit capability of ")
+            .append(limit).toString());
         this.bank = bank;
         this.owner = owner;
         this.account = account;

@@ -49,9 +49,9 @@ public class InterBankPaymentAgencyMediator implements IMediator {
     }
 
     public void transfer() {
-        for (Bank bank : banks.values()) {
+        for (Bank bank: banks.values()) {
             List<TransferCommand> transfers =  bank.getPendingTransfers(name);
-            for (TransferCommand transfer : transfers) {
+            for (TransferCommand transfer: transfers) {
                 Bank receiving = banks.get(transfer.getReceivingBankID());
                 if (receiving != null) {
                     receiving.addPendingTransfer(transfer);

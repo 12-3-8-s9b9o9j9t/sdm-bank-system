@@ -17,7 +17,13 @@ public class CreateDepositCommand extends ATransactionCommand {
     private double limit;
 
     public CreateDepositCommand(Bank bank, Customer owner, AAccount account, Period period, double limit) {
-        super("Create Deposit", "Creating Deposit");
+        super("Create Deposit", 
+            new StringBuilder("Creating Deposit limited to ")
+            .append(limit)
+            .append(" linked to Account ")
+            .append(account.getID())
+            .append(" to not be closed before ")
+            .append(period.toString()).toString());
         this.account = account;
         this.bank = bank;
     }

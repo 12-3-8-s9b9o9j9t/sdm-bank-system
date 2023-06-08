@@ -11,7 +11,13 @@ public class CreateAccountCommand extends ATransactionCommand {
     private Bank bank;
 
     public CreateAccountCommand(Bank bank, Customer owner) {
-        super("Create Account" , "Creating Account");
+        super("Create Account" , 
+            new StringBuilder("Creating Account")
+            .append(" for Customer ")
+            .append(owner.getName())
+            .append(" (")
+            .append(owner.getID())
+            .append(")").toString());
         this.owner = owner;
         this.bank = bank;
     }

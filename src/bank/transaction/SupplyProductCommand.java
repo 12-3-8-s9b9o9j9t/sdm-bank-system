@@ -11,7 +11,11 @@ public class SupplyProductCommand extends ATransactionCommand {
 
 
     public SupplyProductCommand(ISuppliable supplied, double amount) {
-        super("Supply Product", "Supplying Product");
+        super("Supply Product", 
+            new StringBuilder("Supplying ")
+            .append(amount)
+            .append(" to product ")
+            .append(((Product)supplied).getID()).toString());
         this.supplied = supplied;
         this.amount = amount;
     }
@@ -24,7 +28,7 @@ public class SupplyProductCommand extends ATransactionCommand {
             supplied.supply(amount);
         }
         catch (InvalidTransactionException e) {
-            setDescription(getDescription() + " : Failed");
+            setDescription(getDescription() + ": Failed");
             success = false;
         }
         product.log(this);

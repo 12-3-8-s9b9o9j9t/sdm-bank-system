@@ -10,7 +10,11 @@ public class ChargeProductCommand extends ATransactionCommand {
     private double amount;
 
     public ChargeProductCommand(IChargeable charged, double amount) {
-        super("Cahrge Product", "Chargeing Product");
+        super("Charge Product",
+            new StringBuilder("Charging ")
+            .append(amount)
+            .append(" to product ")
+            .append(((Product)charged).getID()).toString());
         this.charged = charged;
         this.amount = amount;
     }
@@ -23,7 +27,7 @@ public class ChargeProductCommand extends ATransactionCommand {
             charged.charge(amount);
         }
         catch (InvalidTransactionException e) {
-            setDescription(getDescription() + " : Failed");
+            setDescription(getDescription() + ": Failed");
             success = false;
         }
         product.log(this);

@@ -118,8 +118,8 @@ public class Bank {
     }
 
     public void calculateInterest() {
-        for (Customer customer : customers.values()) {
-            for (Product product : customer.getProducts().values()) {
+        for (Customer customer: customers.values()) {
+            for (Product product: customer.getProducts().values()) {
                 new CalculateInterestCommand(product)
                     .execute();
             }
@@ -140,7 +140,7 @@ public class Bank {
     }
 
     public void executeTransfers() {
-        for (TransferCommand transfer : insidePendingTransfers) {
+        for (TransferCommand transfer: insidePendingTransfers) {
             transfer.setReceivingAccount(accounts.get(transfer.getReceivingAccountID()));
             transfer.execute();
         }

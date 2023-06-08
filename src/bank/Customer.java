@@ -150,13 +150,13 @@ public class Customer implements IElement {
         return null;
     }
 
-    public String report() {
-        return report(null);
+    public String makeReporting() {
+        return makeReporting(null);
     }
 
-    public String report(Predicate<Product> filter) {
+    public String makeReporting(Predicate<Product> filter) {
         String buffer = null;
-        new ReportCommand(buffer, filter)
+        new ReportCommand(buffer, filter, this)
             .execute();
         return buffer;
     }

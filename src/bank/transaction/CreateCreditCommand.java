@@ -12,7 +12,14 @@ public class CreateCreditCommand extends ATransactionCommand {
     private double limit;
 
     public CreateCreditCommand(Bank bank, Customer owner, double limit) {
-        super("Create Credit", "Creating Credit");
+        super("Create Credit",
+            new StringBuilder("Creating Credit for Customer ")
+            .append(owner.getName())
+            .append(" (")
+            .append(owner.getID())
+            .append(")")
+            .append(" with limit of ")
+            .append(limit).toString());
         this.bank = bank;
         this.owner = owner;
         this.limit = limit;

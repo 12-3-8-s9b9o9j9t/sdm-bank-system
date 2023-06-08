@@ -8,7 +8,9 @@ public class CalculateInterestCommand extends ATransactionCommand {
     private double value = 0;
 
     public CalculateInterestCommand(Product product) {
-        super("Calculate Interest", "Calculating Interest");
+        super("Calculate Interest",
+            new StringBuilder("Calculating Interest for Product ")
+            .append(product.getID()).toString());
         this.product = product;
     }
 

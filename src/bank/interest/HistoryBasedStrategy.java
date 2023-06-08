@@ -28,7 +28,7 @@ public class HistoryBasedStrategy extends AInterestStrategy {
 
         double valueChange = 0;
 
-        for (ATransactionCommand command : history) {
+        for (ATransactionCommand command: history) {
             valueChange += command.getValue();
         }
 
