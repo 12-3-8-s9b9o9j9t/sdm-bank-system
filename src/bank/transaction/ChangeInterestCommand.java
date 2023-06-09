@@ -11,7 +11,7 @@ public class ChangeInterestCommand extends ATransactionCommand {
     public ChangeInterestCommand(Product product, AInterestStrategy state) {
         super("Set Interest",
             new StringBuilder("Changing Interest Mechanism for Product ")
-            .append(product.getID())
+            .append(product.getId())
             .append(" to ")
             .append(state.getClass().getSimpleName()).toString());
         this.product = product;

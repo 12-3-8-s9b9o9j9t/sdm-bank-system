@@ -14,7 +14,7 @@ public class ChargeProductCommand extends ATransactionCommand {
             new StringBuilder("Charging ")
             .append(amount)
             .append(" to product ")
-            .append(((Product)charged).getID()).toString());
+            .append(((Product)charged).getId()).toString());
         this.charged = charged;
         this.amount = amount;
     }

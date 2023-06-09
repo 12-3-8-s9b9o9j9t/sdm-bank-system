@@ -20,8 +20,8 @@ public class Deposit extends Product implements ISuppliable {
     private double limit;
     private double amount = 0;
 
-    public Deposit(String ID, Bank bank, AAccount account, Period period, double limit) {
-        super(ID, bank);
+    public Deposit(String id, Bank bank, AAccount account, Period period, double limit) {
+        super(id, bank);
         this.targetDate = getCreationDate()
             .plus(period);
         this.account = account;
@@ -48,7 +48,7 @@ public class Deposit extends Product implements ISuppliable {
                     .execute()) {
             this.amount += amount;
         } else {
-            throw new InvalidTransactionException("supply " + amount, getID());
+            throw new InvalidTransactionException("supply " + amount, getId());
         }
     }
 
@@ -58,7 +58,7 @@ public class Deposit extends Product implements ISuppliable {
         boolean success = new SupplyProductCommand(account, amount)
                 .execute();
         if (!success) {
-            throw new InvalidTransactionException("close", getID());
+            throw new InvalidTransactionException("close", getId());
         }
         amount = 0;
     }

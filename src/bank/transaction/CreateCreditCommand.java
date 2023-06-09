@@ -2,7 +2,7 @@ package bank.transaction;
 
 import bank.Bank;
 import bank.Customer;
-import bank.exception.InvalidCustomerException;
+import bank.exception.InvalidInputException;
 import bank.product.Product;
 
 public class CreateCreditCommand extends ATransactionCommand {
@@ -16,7 +16,7 @@ public class CreateCreditCommand extends ATransactionCommand {
             new StringBuilder("Creating Credit for Customer ")
             .append(owner.getName())
             .append(" (")
-            .append(owner.getID())
+            .append(owner.getId())
             .append(")")
             .append(" with limit of ")
             .append(limit).toString());
@@ -31,7 +31,7 @@ public class CreateCreditCommand extends ATransactionCommand {
             Product credit = bank.createCredit(owner, limit);
             credit.log(this);
             return true;
-        } catch (InvalidCustomerException e) {
+        } catch (InvalidInputException e) {
             return false;
         }
     }

@@ -11,12 +11,12 @@ public class TransferCommand extends ATransactionCommand {
 
     private Bank senderBank;
     private Customer sender;
-    private String ID;
+    private String id;
     private AAccount sendingAccount;
     private String receivingAccountID;
     private AAccount receivingAccount = null;
     private String receivingBankID = null;
-    private String IBPAName = null;
+    private String IbpaName = null;
     private double amount;
     private ATransferState state;
 
@@ -25,38 +25,38 @@ public class TransferCommand extends ATransactionCommand {
             new StringBuilder("Transfering ")
                     .append(amount)
                     .append(" from Account ")
-                    .append(sendingAccount.getID())
+                    .append(sendingAccount.getId())
                     .append(" to Account ")
                     .append(receivingAccountID).toString());
         this.senderBank = senderBank;
         this.sender = sender;
-        this.ID = generateID();
+        this.id = generateID();
         this.sendingAccount = sendingAccount;
         this.receivingAccountID = receivingAccountID;
         this.amount = amount;
         this.state = new VerifyAmountState(this);
     }
 
-    public TransferCommand(Bank senderBank, Customer sender, AAccount sendingAccount, String receivingAccountID, String receivingBankID, String IBPAName, double amount) {
+    public TransferCommand(Bank senderBank, Customer sender, AAccount sendingAccount, String receivingAccountID, String receivingBankID, String IbpaName, double amount) {
         super("Transfer",
             new StringBuilder("Transfering ")
                     .append(amount)
                     .append(" from Account ")
-                    .append(sendingAccount.getID())
+                    .append(sendingAccount.getId())
                     .append(" to Account ")
                     .append(receivingAccountID)
                     .append(" at Bank ")
                     .append(receivingBankID)
-                    .append(" with IBPA ")
-                    .append(IBPAName).toString());
+                    .append(" with ibpa ")
+                    .append(IbpaName).toString());
         this.senderBank = senderBank;
         this.sender = sender;
-        this.ID = generateID();
+        this.id = generateID();
         this.sendingAccount = sendingAccount;
         this.receivingAccountID = receivingAccountID;
         this.amount = amount;
         this.receivingBankID = receivingBankID;
-        this.IBPAName = IBPAName;
+        this.IbpaName = IbpaName;
     }
 
     private TransferCommand(TransferCommand toCopy) {
@@ -64,16 +64,16 @@ public class TransferCommand extends ATransactionCommand {
             toCopy.getDescription());
         this.senderBank = toCopy.senderBank;
         this.sender = toCopy.sender;
-        this.ID = toCopy.ID;
+        this.id = toCopy.id;
         this.sendingAccount = toCopy.sendingAccount;
         this.receivingAccountID = toCopy.receivingAccountID;
         this.amount = toCopy.amount;
         this.receivingBankID = toCopy.receivingBankID;
-        this.IBPAName = toCopy.IBPAName;
+        this.IbpaName = toCopy.IbpaName;
     }
 
-    public String getID() {
-        return ID;
+    public String getId() {
+        return id;
     }
 
     Bank getSenderBank() {
@@ -97,7 +97,7 @@ public class TransferCommand extends ATransactionCommand {
     }
 
     public String getSendingAccountID() {
-        return sendingAccount.getID();
+        return sendingAccount.getId();
     }
 
     public String getReceivingAccountID() {
@@ -108,8 +108,8 @@ public class TransferCommand extends ATransactionCommand {
         return receivingBankID;
     }
 
-    public String getIBPAName() {
-        return IBPAName;
+    public String getIbpaName() {
+        return IbpaName;
     }
 
     double getAmount() {

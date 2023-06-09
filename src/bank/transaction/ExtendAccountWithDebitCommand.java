@@ -2,7 +2,7 @@ package bank.transaction;
 
 import bank.Bank;
 import bank.Customer;
-import bank.exception.InvalidCustomerException;
+import bank.exception.InvalidInputException;
 import bank.product.account.AAccount;
 
 public class ExtendAccountWithDebitCommand extends ATransactionCommand {
@@ -15,7 +15,7 @@ public class ExtendAccountWithDebitCommand extends ATransactionCommand {
     public ExtendAccountWithDebitCommand(Bank bank, Customer owner, AAccount account, double limit) {
         super("Extend Account With Debit", 
             new StringBuilder("Extending Account ")
-            .append(account.getID())
+            .append(account.getId())
             .append(" with Debit capability of ")
             .append(limit).toString());
         this.bank = bank;
@@ -30,7 +30,7 @@ public class ExtendAccountWithDebitCommand extends ATransactionCommand {
             bank.extendAccountWithDebit(owner, account, limit);
             account.log(this);
             return true;
-        } catch (InvalidCustomerException e) {
+        } catch (InvalidInputException e) {
             return false;
         }
     }

@@ -1,5 +1,6 @@
 package bank.transaction.transfer;
 
+import bank.exception.InvalidTransactionException;
 import bank.product.account.AAccount;
 
 public class WaitReceivingAccountState extends ATransferState {
@@ -12,7 +13,7 @@ public class WaitReceivingAccountState extends ATransferState {
     public boolean execute() {
         TransferCommand context = getContext();
         AAccount receivingAccount = context.getReceivingAccount();
-        if (receivingAccount == null || !receivingAccount.getID().equals(context.getReceivingAccountID()) ) {
+        if (receivingAccount == null || !receivingAccount.getId().equals(context.getReceivingAccountID()) ) {
             return false;
         }
         try { // no exception should be thrown
@@ -25,7 +26,7 @@ public class WaitReceivingAccountState extends ATransferState {
             receiving.supply(amount);
             TransferCommand received = context.copy();
             receiving.log(received.changeState(new TransferReceivedState(received)));
-        } catch (Exception e) {
+        } catch (InvalidTransactionException e) {
             return false;
         }
         return true;

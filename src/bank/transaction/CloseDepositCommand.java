@@ -13,7 +13,7 @@ public class CloseDepositCommand extends ATransactionCommand {
     public CloseDepositCommand(Deposit deposit) {
         super("Close Deposit", 
             new StringBuilder("Closing Deposit linked to Account ")
-            .append(deposit.getAccount().getID())
+            .append(deposit.getAccount().getId())
             .append(" with an advance of ")
             .append(Period.between(LocalDate.now(), deposit.getTargetDate()))
             .toString());

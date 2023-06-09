@@ -22,9 +22,9 @@ public class ReporterVisitor implements IVisitor {
     public String visitLoan(Loan loan) {
         StringBuilder sb = new StringBuilder();
         sb.append("Loan: ").append("\n");
-        sb.append("ID: ").append(loan.getID()).append("\n");
+        sb.append("id: ").append(loan.getId()).append("\n");
         sb.append("Creation date: ").append(loan.getCreationDate()).append("\n");
-        sb.append("Account: ").append(loan.getAccount().getID()).append("\n");
+        sb.append("Account: ").append(loan.getAccount().getId()).append("\n");
         sb.append("Target date: ").append(loan.getTargetDate()).append("\n");
         sb.append("Amount: ").append(loan.getBalance()).append("\n");
         return sb.toString();
@@ -34,9 +34,9 @@ public class ReporterVisitor implements IVisitor {
     public String visitDeposit(Deposit deposit) {
         StringBuilder sb = new StringBuilder();
         sb.append("Deposit: ").append("\n");
-        sb.append("ID: ").append(deposit.getID()).append("\n");
+        sb.append("id: ").append(deposit.getId()).append("\n");
         sb.append("Creation date: ").append(deposit.getCreationDate()).append("\n");
-        sb.append("Account: ").append(deposit.getAccount().getID()).append("\n");
+        sb.append("Account: ").append(deposit.getAccount().getId()).append("\n");
         sb.append("Target date: ").append(deposit.getTargetDate()).append("\n");
         sb.append("Amount: ").append(deposit.getBalance()).append("\n");
         sb.append("Ceiling: ").append(deposit.getLimit()).append("\n");
@@ -47,7 +47,7 @@ public class ReporterVisitor implements IVisitor {
     public String visitCredit(Credit credit) {
         StringBuilder sb = new StringBuilder();
         sb.append("Credit: ").append("\n");
-        sb.append("ID: ").append(credit.getID()).append("\n");
+        sb.append("id: ").append(credit.getId()).append("\n");
         sb.append("Creation date: ").append(credit.getCreationDate()).append("\n");
         sb.append("Ceiling: ").append(credit.getLimit()).append("\n");
         sb.append("Amount: ").append(credit.getBalance()).append("\n");
@@ -58,7 +58,7 @@ public class ReporterVisitor implements IVisitor {
     public String visitBaseAccount(BaseAccount baseAccount) {
         StringBuilder sb = new StringBuilder();
         sb.append("Base account: ").append("\n");
-        sb.append("ID: ").append(baseAccount.getID()).append("\n");
+        sb.append("id: ").append(baseAccount.getId()).append("\n");
         sb.append("Creation date: ").append(baseAccount.getCreationDate()).append("\n");
         sb.append("Balance: ").append(baseAccount.getBalance()).append("\n");
         return sb.toString();
@@ -68,7 +68,7 @@ public class ReporterVisitor implements IVisitor {
     public String visitDebitAccount(DebitDecorator debitAccount) {
         StringBuilder sb = new StringBuilder(); 
         sb.append("Debit account: ").append("\n");
-        sb.append("ID: ").append(debitAccount.getID()).append("\n");
+        sb.append("id: ").append(debitAccount.getId()).append("\n");
         sb.append("Creation date: ").append(debitAccount.getCreationDate()).append("\n");
         sb.append("Balance: ").append(debitAccount.getBalance()).append("\n");
         sb.append("Overdraft: ").append(debitAccount.getOverdraft()).append("\n");

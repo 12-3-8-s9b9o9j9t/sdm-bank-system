@@ -4,7 +4,7 @@ import java.time.Period;
 
 import bank.Bank;
 import bank.Customer;
-import bank.exception.InvalidCustomerException;
+import bank.exception.InvalidInputException;
 import bank.product.Product;
 import bank.product.account.AAccount;
 
@@ -21,7 +21,7 @@ public class CreateLoanCommand extends ATransactionCommand {
             new StringBuilder("Creating Loan of ")
             .append(amount)
             .append(" linked to Account ")
-            .append(account.getID())
+            .append(account.getId())
             .append(" to be reinbursed before ")
             .append(period.toString()).toString());
         this.account = account;
@@ -34,7 +34,7 @@ public class CreateLoanCommand extends ATransactionCommand {
             Product loan = bank.createLoan(owner,account,period,amount);
             loan.log(this);
             return true;
-        } catch (InvalidCustomerException e) {
+        } catch (InvalidInputException e) {
             return false;
         }
     }

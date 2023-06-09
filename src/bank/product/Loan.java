@@ -17,8 +17,8 @@ public class Loan extends Product implements ISuppliable {
     private LocalDate targetDate;
     private double amount;
 
-    public Loan(String ID, Bank bank, AAccount account, Period period, double amount) {
-        super(ID, bank);
+    public Loan(String id, Bank bank, AAccount account, Period period, double amount) {
+        super(id, bank);
         this.targetDate = getCreationDate()
             .plus(period);
         this.account = account;
@@ -43,7 +43,7 @@ public class Loan extends Product implements ISuppliable {
             this.amount -= amount;
         }
         else {
-            throw new InvalidTransactionException("repay " + amount, getID());
+            throw new InvalidTransactionException("repay " + amount, getId());
         }
     }
 

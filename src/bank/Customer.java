@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import bank.exception.InvalidAmountException;
+import bank.exception.InvalidPeriodException;
 import bank.exception.InvalidProductException;
 import bank.product.Deposit;
 import bank.product.IChargeable;
@@ -25,7 +26,7 @@ import bank.transaction.transfer.TransferCommand;
 
 public class Customer implements IElement {
 
-    private int ID;
+    private int id;
     private String name;
     private int password;
     private Bank bank;
@@ -33,15 +34,15 @@ public class Customer implements IElement {
     private Map<String, TransferCommand> toAuthorize = new HashMap<>();
 
     // package-private constructor, only Bank can create Customer
-    Customer(int ID, String name, String password, Bank bank) {
-        this.ID = ID;
+    Customer(int id, String name, String password, Bank bank) {
+        this.id = id;
         this.name = name;
         this.bank = bank;
         this.password = password.hashCode();
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -56,20 +57,20 @@ public class Customer implements IElement {
         return products;
     }
 
-    public Product getProduct(String ID) {
-        return products.get(ID);
+    public Product getProduct(String id) {
+        return products.get(id);
     }
 
     public void addProduct(Product product) {
-        products.put(product.getID(), product);
+        products.put(product.getId(), product);
     }
 
     public boolean removeProduct(Product product) {
-        return products.remove(product.getID()) != null;
+        return products.remove(product.getId()) != null;
     }
 
     public void addTransferToAuthorize(TransferCommand transfer) {
-        toAuthorize.put(transfer.getID(), transfer);
+        toAuthorize.put(transfer.getId(), transfer);
     }
 
     public boolean createAcount() {
@@ -83,17 +84,19 @@ public class Customer implements IElement {
             .execute();
     }
 
-    public boolean createLoan(AAccount account, Period period, double amount) throws InvalidAmountException, InvalidProductException{
+    public boolean createLoan(AAccount account, Period period, double amount) throws InvalidAmountException, InvalidProductException, InvalidPeriodException {
         checkAmount(amount);
         checkProduct(account);
-        return new CreateLoanCommand(bank, this, account, period, amount)
+        checkPeriod(period.normalized());
+        return new CreateLoanCommand(bank, this, account, period.normalized(), amount)
             .execute();
     }
 
-    public boolean createDeposit(AAccount account, Period period, double amount) throws InvalidAmountException, InvalidProductException {
+    public boolean createDeposit(AAccount account, Period period, double amount) throws InvalidAmountException, InvalidProductException, InvalidPeriodException {
         checkAmount(amount);
         checkProduct(account);
-        return new CreateDepositCommand(bank, this, account, period, amount)
+        checkPeriod(period.normalized());
+        return new CreateDepositCommand(bank, this, account, period.normalized(), amount)
             .execute();
     }
 
@@ -135,17 +138,17 @@ public class Customer implements IElement {
         checkProduct(sendingAccount);
         TransferCommand transfer = new TransferCommand(bank, this, sendingAccount, receivingAccountID, amount);
         if (transfer.execute()) {
-            return transfer.getID();
+            return transfer.getId();
         }
         return null;
     }
 
-    public String makeTransfert(AAccount sendingAccount, String receivingAccountID, String bankID, String IBPAName, double amount) throws InvalidAmountException, InvalidProductException {
+    public String makeTransfert(AAccount sendingAccount, String receivingAccountID, String bankID, String IbpaName, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
         checkProduct(sendingAccount);
-        TransferCommand transfer = new TransferCommand(bank, this, sendingAccount, receivingAccountID, bankID, IBPAName, amount);
+        TransferCommand transfer = new TransferCommand(bank, this, sendingAccount, receivingAccountID, bankID, IbpaName, amount);
         if (transfer.execute()) {
-            return transfer.getID();
+            return transfer.getId();
         }
         return null;
     }
@@ -155,10 +158,10 @@ public class Customer implements IElement {
     }
 
     public String makeReporting(Predicate<Product> filter) {
-        String buffer = null;
-        new ReportCommand(buffer, filter, this)
+        StringBuilder builder = new StringBuilder();
+        new ReportCommand(builder, filter, this)
             .execute();
-        return buffer;
+        return builder.toString();
     }
 
 
@@ -171,14 +174,20 @@ public class Customer implements IElement {
     }
 
     private void checkProduct(Product product) throws InvalidProductException {
-        if(!products.containsKey(product.getID())) {
-            throw new InvalidProductException(product.getID());
+        if(!products.containsKey(product.getId())) {
+            throw new InvalidProductException(product.getId());
         }
     }
 
-    private void checkAmount(double amount) throws InvalidAmountException {
+    private static void checkAmount(double amount) throws InvalidAmountException {
         if (amount <= 0) {
             throw new InvalidAmountException();
+        }
+    }
+
+    private static void checkPeriod(Period period) throws InvalidPeriodException {
+        if (period.isNegative() || period.isZero()) {
+            throw new InvalidPeriodException();
         }
     }
 

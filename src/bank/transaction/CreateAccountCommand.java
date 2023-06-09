@@ -16,7 +16,7 @@ public class CreateAccountCommand extends ATransactionCommand {
             .append(" for Customer ")
             .append(owner.getName())
             .append(" (")
-            .append(owner.getID())
+            .append(owner.getId())
             .append(")").toString());
         this.owner = owner;
         this.bank = bank;

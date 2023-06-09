@@ -12,37 +12,35 @@ import bank.reporter.ReporterVisitor;
 
 public class ReportCommand extends ATransactionCommand {
 
-    private String buffer;
+    private StringBuilder builder;
     private Predicate<Product> filter;
     private IVisitor visitor = new ReporterVisitor();
     private Customer customer;
 
-    public ReportCommand(String buffer, Predicate<Product> filter, Customer customer) {
+    public ReportCommand(StringBuilder builder, Predicate<Product> filter, Customer customer) {
         super("Report", "Reporting");
-        this.buffer = buffer;
+        this.builder = builder;
         this.filter = filter;
         this.customer = customer;
     }
 
     @Override
     public boolean execute() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(customer.accept(visitor));
-        sb.append('\n');
+        builder.append(customer.accept(visitor));
+        builder.append('\n');
         Stream<Product> ps = customer.getProducts().values().stream();
         if (filter != null) {
             ps = ps.filter(filter);
         }
         ps.forEach(p -> 
             {
-                sb.append(p.accept(visitor));
-                sb.append('\n');
-                sb.append("Last month's transactions:\n");
+                builder.append(p.accept(visitor));
+                builder.append('\n');
+                builder.append("Last month's transactions:\n");
                 p.getHistory(LocalDate.now().minus(Period.ofMonths(1)))
-                    .forEach(t -> sb.append(t.accept(visitor)));
-                sb.append("\n\n");
+                    .forEach(t -> builder.append(t.accept(visitor)));
+                builder.append("\n\n");
             });
-        buffer = sb.toString();
         return true;
     }
 

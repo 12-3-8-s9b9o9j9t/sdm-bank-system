@@ -13,14 +13,14 @@ import bank.transaction.ATransactionCommand;
 
 public abstract class Product implements IElement {
     
-    private String ID; // given by the bank
+    private String id; // given by the bank
     private Bank bank;
     private List<ATransactionCommand> history = new LinkedList<>();
     private LocalDate creationDate = LocalDate.now();
     private AInterestStrategy interestStrategy;
 
-    public Product(String ID, Bank bank) {
-        this.ID = ID;
+    public Product(String id, Bank bank) {
+        this.id = id;
         this.bank = bank;
     }
 
@@ -60,8 +60,8 @@ public abstract class Product implements IElement {
         this.history = history;
     }
 
-    public String getID() {
-        return ID;
+    public String getId() {
+        return id;
     }
 
     protected Bank getBank() {

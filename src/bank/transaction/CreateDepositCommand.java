@@ -4,7 +4,7 @@ import java.time.Period;
 
 import bank.Bank;
 import bank.Customer;
-import bank.exception.InvalidCustomerException;
+import bank.exception.InvalidInputException;
 import bank.product.Product;
 import bank.product.account.AAccount;
 
@@ -21,7 +21,7 @@ public class CreateDepositCommand extends ATransactionCommand {
             new StringBuilder("Creating Deposit limited to ")
             .append(limit)
             .append(" linked to Account ")
-            .append(account.getID())
+            .append(account.getId())
             .append(" to not be closed before ")
             .append(period.toString()).toString());
         this.account = account;
@@ -34,7 +34,7 @@ public class CreateDepositCommand extends ATransactionCommand {
             Product deposit = bank.createDeposit(owner, account, period, limit);
             deposit.log(this);
             return true;
-        } catch (InvalidCustomerException e) {
+        } catch (InvalidInputException e) {
             return false;
         }
     }

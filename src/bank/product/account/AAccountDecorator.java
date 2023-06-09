@@ -6,14 +6,14 @@ public abstract class AAccountDecorator extends AAccount {
     protected AAccount wrapee;
 
     public AAccountDecorator(AAccount wrapee) {
-        super(wrapee.getID(), wrapee.getBank());
+        super(wrapee.getId(), wrapee.getBank());
         this.wrapee = wrapee;
         this.setHistory(wrapee.getHistory());
     }
 
     @Override
-    public String getID() {
-        return wrapee.getID();
+    public String getId() {
+        return wrapee.getId();
     }
 
     @Override

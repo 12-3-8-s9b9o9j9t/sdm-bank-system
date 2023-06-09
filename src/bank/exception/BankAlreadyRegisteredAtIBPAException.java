@@ -1,9 +1,9 @@
 package bank.exception;
 
-public class BankAlreadyRegisteredAtIBPAException extends Exception {
+public class BankAlreadyRegisteredAtIbpaException extends Exception {
 
-    public BankAlreadyRegisteredAtIBPAException(String bankName, String ibpaName) {
-        super("Bank " + bankName + " already registered at IBPA " + ibpaName);
+    public BankAlreadyRegisteredAtIbpaException(String bankName, String ibpaName) {
+        super("Bank " + bankName + " already registered at ibpa " + ibpaName);
     }
     
 }

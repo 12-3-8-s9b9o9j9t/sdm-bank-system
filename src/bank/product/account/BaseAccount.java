@@ -12,8 +12,8 @@ public class BaseAccount extends AAccount {
     private Customer owner;
     private double balance = 0;
 
-    public BaseAccount(String ID, Bank bank, Customer owner) {
-        super(ID, bank);
+    public BaseAccount(String id, Bank bank, Customer owner) {
+        super(id, bank);
         this.owner = owner;
         setInterest(new FixedInterestStrategy(AInterestStrategy.LOW_RATE));
     }
@@ -31,7 +31,7 @@ public class BaseAccount extends AAccount {
     @Override
     public void charge(double amount) throws InvalidTransactionException {
         if (amount <= 0 || this.balance < amount) {
-            throw new InvalidTransactionException("charge " + amount + "for product " + getID(), "problematic amount");
+            throw new InvalidTransactionException("charge " + amount + "for product " + getId(), "problematic amount");
         }
         this.balance -= amount;
     }
@@ -39,7 +39,7 @@ public class BaseAccount extends AAccount {
     @Override
     public void supply(double amount) throws InvalidTransactionException {
         if (amount <= 0) {
-            throw new InvalidTransactionException("supply " + amount + "for product " + getID(), "problematic amount");
+            throw new InvalidTransactionException("supply " + amount + "for product " + getId(), "problematic amount");
         }
         this.balance += amount;
     }

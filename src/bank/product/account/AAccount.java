@@ -8,8 +8,8 @@ import bank.product.Product;
 
 public abstract class AAccount extends Product implements IChargeable, ISuppliable {
 
-    public AAccount(String ID, Bank bank) {
-        super(ID, bank);
+    public AAccount(String id, Bank bank) {
+        super(id, bank);
     }
 
     protected Bank getBank() {

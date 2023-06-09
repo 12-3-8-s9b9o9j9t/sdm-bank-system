@@ -8,9 +8,14 @@ import java.util.Map;
 import java.util.List;
 import java.util.UUID;
 
-import bank.exception.BankAlreadyRegisteredAtIBPAException;
+import bank.exception.BankAlreadyRegisteredAtIbpaException;
 import bank.exception.CustomerAlreadyExistsException;
+import bank.exception.InvalidAmountException;
+import bank.exception.InvalidBankException;
 import bank.exception.InvalidCustomerException;
+import bank.exception.InvalidInputException;
+import bank.exception.InvalidPeriodException;
+import bank.exception.InvalidProductException;
 import bank.ibpa.InterBankPaymentAgencyMediator;
 import bank.interest.AInterestStrategy;
 import bank.product.Credit;
@@ -26,8 +31,8 @@ import bank.transaction.ChangeInterestCommand;
 import bank.transaction.transfer.TransferCommand;
 
 public class Bank {
-    // key is the ID of the bank assigned by the IBPA
-    private Map<String, InterBankPaymentAgencyMediator> IBPAs = new HashMap<>();
+    // key is the id of the bank assigned by the ibpa
+    private Map<String, InterBankPaymentAgencyMediator> ibpas = new HashMap<>();
     private String name;
     private List<ATransactionCommand> history = new LinkedList<>();
     private Map<Integer, Customer> customers = new HashMap<>();
@@ -44,25 +49,30 @@ public class Bank {
         return name;
     }
 
-    public void addIBPA(String ID, InterBankPaymentAgencyMediator IBPA) {
-        IBPAs.put(ID, IBPA);
-        outsidePendingTransfers.put(IBPA.getName(), new LinkedList<>());
+    public void addIbpa(String id, InterBankPaymentAgencyMediator ibpa) {
+        ibpas.put(id, ibpa);
+        outsidePendingTransfers.put(ibpa.getName(), new LinkedList<>());
     }
 
-    public void registerAtIBPA(InterBankPaymentAgencyMediator IBPA) throws Exception {
-        if (IBPAs.containsValue(IBPA)) {
-            throw new BankAlreadyRegisteredAtIBPAException(name, IBPA.getName());
+    public void registerAtIbpa(InterBankPaymentAgencyMediator ibpa) throws BankAlreadyRegisteredAtIbpaException {
+        if (ibpas.containsValue(ibpa)) {
+            throw new BankAlreadyRegisteredAtIbpaException(name, ibpa.getName());
         }
-        IBPA.notify(this, "register");
+        try {
+            ibpa.notify(this, "register");
+        } catch (InvalidBankException e) {
+            // This should never happen
+            throw new RuntimeException("InvalidBankException occurred", e);
+        }
     }
 
     /*
-     * Here we suppose the ID is the national ID of the customer
+     * Here we suppose the id is the national id of the customer
      */
-    public Customer registerCustomer(String ID, String name, String password) throws CustomerAlreadyExistsException {
-        int hash = ID.hashCode();
+    public Customer registerCustomer(String id, String name, String password) throws CustomerAlreadyExistsException {
+        int hash = id.hashCode();
         if (customers.containsKey(hash)) {
-            throw new CustomerAlreadyExistsException(ID);
+            throw new CustomerAlreadyExistsException(id);
         }
         Customer customer = new Customer(hash, name, password, this);
         customers.put(hash, customer);
@@ -71,42 +81,51 @@ public class Bank {
 
     public Product createAccount(Customer owner) throws InvalidCustomerException {
         checkCustomer(owner);
-        String ID = generateProductID();
-        AAccount account = new BaseAccount(ID, this, owner);
+        String id = generateProductID();
+        AAccount account = new BaseAccount(id, this, owner);
         owner.addProduct(account);
-        accounts.put(ID, account);
+        accounts.put(id, account);
         return account;
     }
     
-    public Product createCredit(Customer owner, double limit) throws InvalidCustomerException {
+    public Product createCredit(Customer owner, double limit) throws InvalidInputException {
         checkCustomer(owner);
-        String ID = "CRD" + generateProductID();
-        Credit credit = new Credit(ID, this, limit);
+        checkAmount(limit);
+        String id = "CRD" + generateProductID();
+        Credit credit = new Credit(id, this, limit);
         owner.addProduct(credit);
         return credit;
     }
 
-    public Product createLoan(Customer owner, AAccount account, Period period, double amount) throws InvalidCustomerException {
+    public Product createLoan(Customer owner, AAccount account, Period period, double amount) throws InvalidInputException {
         checkCustomer(owner);
-        String ID = "LOA" + generateProductID();
-        Loan loan = new Loan(ID, this, account, period, amount);
+        checkProduct(owner, account);
+        checkAmount(amount);
+        checkPeriod(period.normalized());
+        String id = "LOA" + generateProductID();
+        Loan loan = new Loan(id, this, account, period.normalized(), amount);
         owner.addProduct(loan);
         return loan;
     }
 
-    public Product createDeposit(Customer owner, AAccount account, Period period, double amount) throws InvalidCustomerException {
+    public Product createDeposit(Customer owner, AAccount account, Period period, double amount) throws InvalidInputException {
         checkCustomer(owner);
-        String ID = "DEP" + generateProductID();
-        Deposit deposit = new Deposit(ID, this, account, period, amount);
+        checkProduct(owner, account);
+        checkAmount(amount);
+        checkPeriod(period.normalized());
+        String id = "DEP" + generateProductID();
+        Deposit deposit = new Deposit(id, this, account, period.normalized(), amount);
         owner.addProduct(deposit);
         return deposit;
     }
 
-    public Product extendAccountWithDebit(Customer owner, AAccount account, double limit) throws InvalidCustomerException {
+    public Product extendAccountWithDebit(Customer owner, AAccount account, double limit) throws InvalidInputException {
         checkCustomer(owner);
+        checkProduct(owner, account);
+        checkAmount(limit);
         DebitDecorator debit = new DebitDecorator(account, limit);
         owner.addProduct(debit);
-        accounts.put(debit.getID(), debit);
+        accounts.put(debit.getId(), debit);
         return debit;
     }
 
@@ -128,15 +147,15 @@ public class Bank {
 
     public void addPendingTransfer(TransferCommand transfer) {
         String bankID = transfer.getReceivingBankID();
-        if (bankID != null && !IBPAs.containsKey(bankID)) {
-            outsidePendingTransfers.get(transfer.getIBPAName()).add(transfer);
+        if (bankID != null && !ibpas.containsKey(bankID)) {
+            outsidePendingTransfers.get(transfer.getIbpaName()).add(transfer);
         } else {
             insidePendingTransfers.add(transfer);
         }
     }
 
-    public List<TransferCommand> getPendingTransfers(String IBPAName) {
-        return outsidePendingTransfers.get(IBPAName);
+    public List<TransferCommand> getPendingTransfers(String IbpaName) {
+        return outsidePendingTransfers.get(IbpaName);
     }
 
     public void executeTransfers() {
@@ -153,7 +172,25 @@ public class Bank {
         }
     }
 
-    private String generateProductID() {
+    private void checkProduct(Customer owner, Product product) throws InvalidProductException {
+        if(owner.getProduct(product.getId()) == null) {
+            throw new InvalidProductException(product.getId());
+        }
+    }
+
+    private static void checkAmount(double amount) throws InvalidAmountException {
+        if (amount <= 0) {
+            throw new InvalidAmountException();
+        }
+    }
+
+    private static void checkPeriod(Period period) throws InvalidPeriodException {
+        if (period.isNegative() || period.isZero()) {
+            throw new InvalidPeriodException();
+        }
+    }
+
+    private static String generateProductID() {
         return UUID.randomUUID()
                 .toString()
                 .replaceAll("-", "")

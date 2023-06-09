@@ -15,7 +15,7 @@ public class SupplyProductCommand extends ATransactionCommand {
             new StringBuilder("Supplying ")
             .append(amount)
             .append(" to product ")
-            .append(((Product)supplied).getID()).toString());
+            .append(((Product)supplied).getId()).toString());
         this.supplied = supplied;
         this.amount = amount;
     }
