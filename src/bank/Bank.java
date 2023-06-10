@@ -49,9 +49,26 @@ public class Bank {
         return name;
     }
 
+    public List<TransferCommand> getPendingTransfers(String IbpaName) {
+        return outsidePendingTransfers.get(IbpaName);
+    }
+
+    public void log(ATransactionCommand transaction) {
+        history.add(transaction);
+    }
+
     public void addIbpa(String id, InterBankPaymentAgencyMediator ibpa) {
         ibpas.put(id, ibpa);
         outsidePendingTransfers.put(ibpa.getName(), new LinkedList<>());
+    }
+
+    public void addPendingTransfer(TransferCommand transfer) {
+        String bankID = transfer.getReceivingBankID();
+        if (bankID != null && !ibpas.containsKey(bankID)) {
+            outsidePendingTransfers.get(transfer.getIbpaName()).add(transfer);
+        } else {
+            insidePendingTransfers.add(transfer);
+        }
     }
 
     public void registerAtIbpa(InterBankPaymentAgencyMediator ibpa) throws BankAlreadyRegisteredAtIbpaException {
@@ -129,10 +146,10 @@ public class Bank {
         return debit;
     }
 
-    public boolean changeInterest(int customerID, String productID, AInterestStrategy state) {
+    public boolean changeInterest(int customerID, String productID, AInterestStrategy strategy) {
         Customer customer = customers.get(customerID);
         Product product = customer.getProduct(productID);
-        return new ChangeInterestCommand(product, state)
+        return new ChangeInterestCommand(product, strategy)
             .execute();
     }
 
@@ -143,19 +160,6 @@ public class Bank {
                     .execute();
             }
         }
-    }
-
-    public void addPendingTransfer(TransferCommand transfer) {
-        String bankID = transfer.getReceivingBankID();
-        if (bankID != null && !ibpas.containsKey(bankID)) {
-            outsidePendingTransfers.get(transfer.getIbpaName()).add(transfer);
-        } else {
-            insidePendingTransfers.add(transfer);
-        }
-    }
-
-    public List<TransferCommand> getPendingTransfers(String IbpaName) {
-        return outsidePendingTransfers.get(IbpaName);
     }
 
     public void executeTransfers() {
@@ -195,10 +199,6 @@ public class Bank {
                 .toString()
                 .replaceAll("-", "")
                 .toUpperCase(Locale.ENGLISH);
-    }
-
-    public void log(ATransactionCommand transaction) {
-        history.add(transaction);
     }
 
 }
