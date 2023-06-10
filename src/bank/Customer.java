@@ -110,7 +110,7 @@ public class Customer implements IElement {
     public boolean closeDeposit(Deposit deposit) throws InvalidProductException {
         checkProduct(deposit);
         boolean success = new CloseDepositCommand(deposit)
-                .execute();
+            .execute();
         if (success) {
             removeProduct(deposit);
         }
@@ -119,21 +119,19 @@ public class Customer implements IElement {
 
     public boolean supplyProduct(ISuppliable supplied, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
-        Product product = (Product)supplied;
-        checkProduct(product);
+        checkProduct((Product)supplied);
         return new SupplyProductCommand(supplied, amount)
             .execute();
     }
 
     public boolean chargeProduct(IChargeable charged, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
-        Product product = (Product)charged;
-        checkProduct(product);
+        checkProduct((Product)charged);
         return new ChargeProductCommand(charged, amount)
             .execute();
     }
 
-    public String makeTransfert(AAccount sendingAccount, String receivingAccountID, double amount) throws InvalidAmountException, InvalidProductException {
+    public String makeTransfer(AAccount sendingAccount, String receivingAccountID, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
         checkProduct(sendingAccount);
         TransferCommand transfer = new TransferCommand(bank, this, sendingAccount, receivingAccountID, amount);
@@ -143,7 +141,7 @@ public class Customer implements IElement {
         return null;
     }
 
-    public String makeTransfert(AAccount sendingAccount, String receivingAccountID, String bankID, String IbpaName, double amount) throws InvalidAmountException, InvalidProductException {
+    public String makeTransfer(AAccount sendingAccount, String receivingAccountID, String bankID, String IbpaName, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
         checkProduct(sendingAccount);
         TransferCommand transfer = new TransferCommand(bank, this, sendingAccount, receivingAccountID, bankID, IbpaName, amount);
@@ -165,12 +163,17 @@ public class Customer implements IElement {
     }
 
 
-    public boolean authorizeTransfert(String transferID, String password) {
+    public boolean authorizeTransfer(String transferID, String password) {
         TransferCommand transfer = toAuthorize.get(transferID);
         if (transfer != null && this.password == password.hashCode()) {
             return transfer.execute();
         }
         return false;
+    }
+
+    @Override
+    public String accept(IVisitor visitor) {
+        return visitor.visitCustomer(this);
     }
 
     private void checkProduct(Product product) throws InvalidProductException {
@@ -189,11 +192,6 @@ public class Customer implements IElement {
         if (period.isNegative() || period.isZero()) {
             throw new InvalidPeriodException();
         }
-    }
-
-    @Override
-    public String accept(IVisitor visitor) {
-        return visitor.visitCustomer(this);
     }
     
 }

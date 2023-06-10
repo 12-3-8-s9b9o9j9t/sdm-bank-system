@@ -1,8 +1,7 @@
 package bank;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Field;
@@ -77,7 +76,9 @@ public class TestBank {
         loan = mockConstruction(Loan.class);
         deposit = mockConstruction(Deposit.class);
         debitDecorator = mockConstruction(DebitDecorator.class);
-        changeInterestCommand = mockConstruction(ChangeInterestCommand.class);
+        changeInterestCommand = mockConstruction(ChangeInterestCommand.class, (mock, context) -> {
+            when(mock.execute()).thenReturn(true);
+        });
         calculateInterestCommand = mockConstruction(CalculateInterestCommand.class);
     }
 
@@ -118,8 +119,12 @@ public class TestBank {
             bank.addIbpa("TESTBANK0", mockIbpa);
             return null;
         }).when(mockIbpa).notify(bank, "register");
-        bank.registerAtIbpa(mockIbpa);
-        bank.registerAtIbpa(mockIbpa);
+        try {
+            bank.registerAtIbpa(mockIbpa);
+            bank.registerAtIbpa(mockIbpa);
+        } finally {
+            verify(mockIbpa, times(1)).notify(bank, "register");
+        }
     }
 
     @Test
@@ -196,7 +201,7 @@ public class TestBank {
     @Test
     public void test_createCredit() throws Exception {
         when(mockCustomer.getBank()).thenReturn(bank);
-        Product c = bank.createCredit(mockCustomer, 1000);
+        Product c = bank.createCredit(mockCustomer, 1000.0);
         assertEquals(1, credit.constructed().size());
         assertEquals(c, credit.constructed().get(0));
         verify(mockCustomer, times(1)).addProduct(c);
@@ -206,7 +211,7 @@ public class TestBank {
     public void test_createCredit_invalidCustomer() throws Exception {
         when(mockCustomer.getBank()).thenReturn(bank2);
         try {
-            bank.createCredit(mockCustomer, 1000);
+            bank.createCredit(mockCustomer, 1000.0);
         } finally {
             assertEquals(0, credit.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -217,7 +222,7 @@ public class TestBank {
     public void test_createCredit_invalidAmount() throws Exception {
         when(mockCustomer.getBank()).thenReturn(bank);
         try {
-            bank.createCredit(mockCustomer, -1000);
+            bank.createCredit(mockCustomer, -1000.0);
         } finally {
             assertEquals(0, credit.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -229,7 +234,7 @@ public class TestBank {
         when(mockCustomer.getBank()).thenReturn(bank);
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(mockAccount);
-        Product l = bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(12), 1000);
+        Product l = bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(12), 1000.0);
         assertEquals(1, loan.constructed().size());
         assertEquals(l, loan.constructed().get(0));
         verify(mockCustomer, times(1)).addProduct(l);
@@ -240,7 +245,7 @@ public class TestBank {
         when(mockCustomer.getBank()).thenReturn(bank2);
         when(mockCustomer.getProduct(anyString())).thenReturn(mockAccount);
         try {
-            bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(12), 1000);
+            bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(12), 1000.0);
         } finally {
             assertEquals(0, loan.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -253,7 +258,7 @@ public class TestBank {
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(null);
         try {
-            bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(12), 1000);
+            bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(12), 1000.0);
         } finally {
             assertEquals(0, loan.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -266,7 +271,7 @@ public class TestBank {
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(mockAccount);
         try {
-            bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(0), 1000);
+            bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(0), 1000.0);
         } finally {
             assertEquals(0, loan.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -279,7 +284,7 @@ public class TestBank {
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(mockAccount);
         try {
-            bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(12), -1000);
+            bank.createLoan(mockCustomer, mockAccount, Period.ofMonths(12), -1000.0);
         } finally {
             assertEquals(0, loan.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -291,7 +296,7 @@ public class TestBank {
         when(mockCustomer.getBank()).thenReturn(bank);
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(mockAccount);
-        Product d = bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(12), 1000);
+        Product d = bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(12), 1000.0);
         assertEquals(1, deposit.constructed().size());
         assertEquals(d, deposit.constructed().get(0));
         verify(mockCustomer, times(1)).addProduct(d);
@@ -302,7 +307,7 @@ public class TestBank {
         when(mockCustomer.getBank()).thenReturn(bank2);
         when(mockCustomer.getProduct(anyString())).thenReturn(mockAccount);
         try {
-            bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(12), 1000);
+            bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(12), 1000.0);
         } finally {
             assertEquals(0, deposit.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -315,7 +320,7 @@ public class TestBank {
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(null);
         try {
-            bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(12), 1000);
+            bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(12), 1000.0);
         } finally {
             assertEquals(0, deposit.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -328,7 +333,7 @@ public class TestBank {
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(mockAccount);
         try {
-            bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(0), 1000);
+            bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(0), 1000.0);
         } finally {
             assertEquals(0, deposit.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -341,7 +346,7 @@ public class TestBank {
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(mockAccount);
         try {
-            bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(12), -1000);
+            bank.createDeposit(mockCustomer, mockAccount, Period.ofMonths(12), -1000.0);
         } finally {
             assertEquals(0, deposit.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -353,7 +358,7 @@ public class TestBank {
         when(mockCustomer.getBank()).thenReturn(bank);
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(mockAccount);
-        Product d = bank.extendAccountWithDebit(mockCustomer, mockAccount, 1000);
+        Product d = bank.extendAccountWithDebit(mockCustomer, mockAccount, 1000.0);
         assertEquals(1, debitDecorator.constructed().size());
         assertEquals(d, debitDecorator.constructed().get(0));
         verify(mockCustomer, times(1)).addProduct(d);
@@ -364,7 +369,7 @@ public class TestBank {
         when(mockCustomer.getBank()).thenReturn(bank2);
         when(mockCustomer.getProduct(anyString())).thenReturn(mockAccount);
         try {
-            bank.extendAccountWithDebit(mockCustomer, mockAccount, 1000);
+            bank.extendAccountWithDebit(mockCustomer, mockAccount, 1000.0);
         } finally {
             assertEquals(0, debitDecorator.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -377,7 +382,7 @@ public class TestBank {
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(null);
         try {
-            bank.extendAccountWithDebit(mockCustomer, mockAccount, 1000);
+            bank.extendAccountWithDebit(mockCustomer, mockAccount, 1000.0);
         } finally {
             assertEquals(0, debitDecorator.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -390,7 +395,7 @@ public class TestBank {
         when(mockAccount.getId()).thenReturn("ID");
         when(mockCustomer.getProduct("ID")).thenReturn(mockAccount);
         try {
-            bank.extendAccountWithDebit(mockCustomer, mockAccount, -1000);
+            bank.extendAccountWithDebit(mockCustomer, mockAccount, -1000.0);
         } finally {
             assertEquals(0, debitDecorator.constructed().size());
             verify(mockCustomer, times(0)).addProduct(any());
@@ -404,9 +409,10 @@ public class TestBank {
         f.setAccessible(true);
         Map<Integer, Customer> customers = (Map<Integer, Customer>) f.get(bank);
         customers.put(0, mockCustomer);
-        bank.changeInterest(0, "ID", mockInterest);
+        boolean success = bank.changeInterest(0, "ID", mockInterest);
         assertEquals(1, changeInterestCommand.constructed().size());
         verify(changeInterestCommand.constructed().get(0), times(1)).execute();
+        assertTrue(success);
     }
 
     @Test
