@@ -53,6 +53,10 @@ public class Bank {
         return outsidePendingTransfers.get(IbpaName);
     }
 
+    public void clearPendingTransfers(String IbpaName) {
+        outsidePendingTransfers.get(IbpaName).clear();
+    }
+
     public void log(ATransactionCommand transaction) {
         history.add(transaction);
     }

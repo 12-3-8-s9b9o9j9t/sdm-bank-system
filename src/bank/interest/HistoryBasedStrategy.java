@@ -9,14 +9,16 @@ import bank.transaction.ATransactionCommand;
 public class HistoryBasedStrategy extends AInterestStrategy {
 
     private double rate;
+    private boolean rewardHighBalance;
 
-    public HistoryBasedStrategy() {
-        this(STANDARD_RATE);
+    public HistoryBasedStrategy(boolean rewardHighBalance) {
+        this(STANDARD_RATE, rewardHighBalance);
     }
 
-    public HistoryBasedStrategy(double rate) {
+    public HistoryBasedStrategy(double rate, boolean rewardHighBalance) {
         super("History Based Interest");
         this.rate = rate;
+        this.rewardHighBalance = rewardHighBalance;
     }
 
     @Override
@@ -31,6 +33,10 @@ public class HistoryBasedStrategy extends AInterestStrategy {
 
         for (ATransactionCommand command: history) {
             valueChange += command.getValue();
+        }
+
+        if (rewardHighBalance) {
+            valueChange *= -1;
         }
 
         if (valueChange < 0) {

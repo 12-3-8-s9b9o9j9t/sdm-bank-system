@@ -13,7 +13,7 @@ public class Credit extends AProduct implements IChargeable, ISuppliable {
     public Credit(String id, Bank bank,  double limit) {
         super(id, bank);
         this.limit = limit;
-        setInterest(new HistoryBasedStrategy());
+        setInterest(new HistoryBasedStrategy(false));
     }
 
     public double getLimit() {

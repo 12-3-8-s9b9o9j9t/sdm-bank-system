@@ -37,19 +37,6 @@ public class InterBankPaymentAgencyMediator implements IMediator {
         }
     }
 
-    private void registerBank(Bank bank) {
-        String id = generateBankID(bank.getName());
-        bank.addIbpa(id, this);
-        banks.put(id, bank);
-    }
-
-    private String generateBankID(String name) {
-        Random random = new Random();
-        return name.toUpperCase(Locale.ENGLISH)
-            .replaceAll("[\\s-]", "")
-             + (random.nextInt() & Integer.MAX_VALUE);
-    }
-
     public void transfer() {
         for (Bank bank: banks.values()) {
             List<TransferCommand> transfers =  bank.getPendingTransfers(name);
@@ -61,8 +48,21 @@ public class InterBankPaymentAgencyMediator implements IMediator {
                     transfer.execute();
                 }
             }
-            transfers.clear();
+            bank.clearPendingTransfers(name);
         }
+    }
+
+    private void registerBank(Bank bank) {
+        String id = generateBankID(bank.getName());
+        bank.addIbpa(id, this);
+        banks.put(id, bank);
+    }
+
+    private static String generateBankID(String name) {
+        Random random = new Random();
+        return name.toUpperCase(Locale.ENGLISH)
+            .replaceAll("[\\s-]", "")
+             + (random.nextInt() & Integer.MAX_VALUE);
     }
 
     private void checkBank(Bank bank) throws InvalidBankException {

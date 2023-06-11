@@ -31,7 +31,7 @@ public abstract class AInterestStrategy {
         this.lastCalculationDate = lastCalculationDate;
     }
 
-    protected static double getDurationInYears(LocalDate startDate, LocalDate endDate) {
+    public static double getDurationInYears(LocalDate startDate, LocalDate endDate) {
         return (endDate.toEpochDay() - startDate.toEpochDay()) / 365.0;
     }
 
