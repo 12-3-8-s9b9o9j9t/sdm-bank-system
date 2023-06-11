@@ -6,21 +6,21 @@ import bank.product.Product;
 public class ChangeInterestCommand extends ATransactionCommand {
 
     private Product product;
-    private AInterestStrategy state;
+    private AInterestStrategy strategy;
 
-    public ChangeInterestCommand(Product product, AInterestStrategy state) {
+    public ChangeInterestCommand(Product product, AInterestStrategy strategy) {
         super("Set Interest",
             new StringBuilder("Changing Interest Mechanism for Product ")
             .append(product.getId())
             .append(" to ")
-            .append(state.getClass().getSimpleName()).toString());
+            .append(strategy.getName()).toString());
         this.product = product;
-        this.state = state;
+        this.strategy = strategy;
     }
 
     @Override
     public boolean execute() {
-        product.setInterest(state);
+        product.setInterest(strategy);
         product.log(this);
         return true;
     }

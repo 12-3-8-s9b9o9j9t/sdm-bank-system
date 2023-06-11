@@ -23,11 +23,11 @@ public class TransferCommand extends ATransactionCommand {
     public TransferCommand(Bank senderBank, Customer sender, AAccount sendingAccount, String receivingAccountID, double amount) {
         super("Transfer",
             new StringBuilder("Transfering ")
-                    .append(amount)
-                    .append(" from Account ")
-                    .append(sendingAccount.getId())
-                    .append(" to Account ")
-                    .append(receivingAccountID).toString());
+                .append(amount)
+                .append(" from Account ")
+                .append(sendingAccount.getId())
+                .append(" to Account ")
+                .append(receivingAccountID).toString());
         this.senderBank = senderBank;
         this.sender = sender;
         this.id = generateID();
@@ -57,6 +57,7 @@ public class TransferCommand extends ATransactionCommand {
         this.amount = amount;
         this.receivingBankID = receivingBankID;
         this.IbpaName = IbpaName;
+        this.state = new VerifyAmountState(this);
     }
 
     private TransferCommand(TransferCommand toCopy) {

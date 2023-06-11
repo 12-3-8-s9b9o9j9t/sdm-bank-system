@@ -5,7 +5,7 @@ import java.time.Period;
 import bank.Bank;
 import bank.Customer;
 import bank.exception.InvalidInputException;
-import bank.product.Product;
+import bank.product.Deposit;
 import bank.product.account.AAccount;
 
 public class CreateDepositCommand extends ATransactionCommand {
@@ -26,12 +26,15 @@ public class CreateDepositCommand extends ATransactionCommand {
             .append(period.toString()).toString());
         this.account = account;
         this.bank = bank;
+        this.owner = owner;
+        this.period = period;
+        this.limit = limit;
     }
 
     @Override
     public boolean execute() {
         try {
-            Product deposit = bank.createDeposit(owner, account, period, limit);
+            Deposit deposit = bank.createDeposit(owner, account, period, limit);
             deposit.log(this);
             return true;
         } catch (InvalidInputException e) {

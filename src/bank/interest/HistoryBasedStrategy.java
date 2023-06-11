@@ -15,6 +15,7 @@ public class HistoryBasedStrategy extends AInterestStrategy {
     }
 
     public HistoryBasedStrategy(double rate) {
+        super("History Based Interest");
         this.rate = rate;
     }
 

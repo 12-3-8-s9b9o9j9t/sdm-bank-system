@@ -27,8 +27,8 @@ public class ExtendAccountWithDebitCommand extends ATransactionCommand {
     @Override
     public boolean execute() {
         try {
-            bank.extendAccountWithDebit(owner, account, limit);
-            account.log(this);
+            AAccount debit = bank.extendAccountWithDebit(owner, account, limit);
+            debit.log(this);
             return true;
         } catch (InvalidInputException e) {
             return false;

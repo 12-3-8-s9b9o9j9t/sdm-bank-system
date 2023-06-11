@@ -129,7 +129,7 @@ public class TestCustomer {
     public void test_createAccount() {
         boolean success = customer.createAcount();
         assertEquals(1, createAccountCommand.constructed().size());
-        verify(createAccountCommand.constructed().get(0), times(1)).execute();
+        verify(createAccountCommand.constructed().get(0)).execute();
         assertTrue(success);
     }
 
@@ -137,7 +137,7 @@ public class TestCustomer {
     public void test_createCredit() throws Exception {
         boolean success = customer.createCredit(1000.0);
         assertEquals(1, createCreditCommand.constructed().size());
-        verify(createCreditCommand.constructed().get(0), times(1)).execute();
+        verify(createCreditCommand.constructed().get(0)).execute();
         assertTrue(success);
     }
 
@@ -156,7 +156,7 @@ public class TestCustomer {
         customer.addProduct(mockAccount);
         boolean success = customer.createLoan(mockAccount, Period.ofMonths(12), 1000.0);
         assertEquals(1, createLoanCommand.constructed().size());
-        verify(createLoanCommand.constructed().get(0), times(1)).execute();
+        verify(createLoanCommand.constructed().get(0)).execute();
         assertTrue(success);
     }
 
@@ -198,7 +198,7 @@ public class TestCustomer {
         customer.addProduct(mockAccount);
         boolean success = customer.createDeposit(mockAccount, Period.ofMonths(12), 1000.0);
         assertEquals(1, createDepositCommand.constructed().size());
-        verify(createDepositCommand.constructed().get(0), times(1)).execute();
+        verify(createDepositCommand.constructed().get(0)).execute();
         assertTrue(success);
     }
 
@@ -240,7 +240,7 @@ public class TestCustomer {
         customer.addProduct(mockAccount);
         boolean success = customer.extendAccountWithDebit(mockAccount, 1000.0);
         assertEquals(1, extendAccountWithDebitCommand.constructed().size());
-        verify(extendAccountWithDebitCommand.constructed().get(0), times(1)).execute();
+        verify(extendAccountWithDebitCommand.constructed().get(0)).execute();
         assertTrue(success);
     }
 
@@ -271,7 +271,7 @@ public class TestCustomer {
         customer.addProduct(mockDeposit);
         boolean success = customer.closeDeposit(mockDeposit);
         assertEquals(1, closeDepositCommand.constructed().size());
-        verify(closeDepositCommand.constructed().get(0), times(1)).execute();
+        verify(closeDepositCommand.constructed().get(0)).execute();
         assertEquals(0, customer.getProducts().size());
         assertTrue(success);
     }
@@ -286,7 +286,7 @@ public class TestCustomer {
         });
         boolean success = customer.closeDeposit(mockDeposit);
         assertEquals(1, closeDepositCommand.constructed().size());
-        verify(closeDepositCommand.constructed().get(0), times(1)).execute();
+        verify(closeDepositCommand.constructed().get(0)).execute();
         assertEquals(1, customer.getProducts().size());
         assertFalse(success);
     }
@@ -307,7 +307,7 @@ public class TestCustomer {
         customer.addProduct(mockSuppliable);
         boolean success = customer.supplyProduct((ISuppliable)mockSuppliable, 1000.0);
         assertEquals(1, supplyProductCommand.constructed().size());
-        verify(supplyProductCommand.constructed().get(0), times(1)).execute();
+        verify(supplyProductCommand.constructed().get(0)).execute();
         assertTrue(success);
     }
 
@@ -321,7 +321,7 @@ public class TestCustomer {
         });
         boolean success = customer.supplyProduct((ISuppliable)mockSuppliable, 1000.0);
         assertEquals(1, supplyProductCommand.constructed().size());
-        verify(supplyProductCommand.constructed().get(0), times(1)).execute();
+        verify(supplyProductCommand.constructed().get(0)).execute();
         assertFalse(success);
     }
 
@@ -352,7 +352,7 @@ public class TestCustomer {
         customer.addProduct(mockChargeable);
         boolean success = customer.chargeProduct((IChargeable)mockChargeable, 1000.0);
         assertEquals(1, chargeProductCommand.constructed().size());
-        verify(chargeProductCommand.constructed().get(0), times(1)).execute();
+        verify(chargeProductCommand.constructed().get(0)).execute();
         assertTrue(success);
     }
 
@@ -366,7 +366,7 @@ public class TestCustomer {
         });
         boolean success = customer.chargeProduct((IChargeable)mockChargeable, 1000.0);
         assertEquals(1, chargeProductCommand.constructed().size());
-        verify(chargeProductCommand.constructed().get(0), times(1)).execute();
+        verify(chargeProductCommand.constructed().get(0)).execute();
         assertFalse(success);
     }
 
@@ -397,7 +397,7 @@ public class TestCustomer {
         customer.addProduct(mockAccount);
         String id = customer.makeTransfer(mockAccount, "ID2", 1000.0);
         assertEquals(1, transferCommand.constructed().size());
-        verify(transferCommand.constructed().get(0), times(1)).execute();
+        verify(transferCommand.constructed().get(0)).execute();
         assertEquals("TID", id);
     }
 
@@ -411,7 +411,7 @@ public class TestCustomer {
         });
         String id = customer.makeTransfer(mockAccount, "ID2", 1000.0);
         assertEquals(1, transferCommand.constructed().size());
-        verify(transferCommand.constructed().get(0), times(1)).execute();
+        verify(transferCommand.constructed().get(0)).execute();
         assertNull(id);
     }
 
@@ -442,7 +442,7 @@ public class TestCustomer {
         customer.addProduct(mockAccount);
         String id = customer.makeTransfer(mockAccount, "ID2", "OtherBank", "SWIFT", 1000.0);
         assertEquals(1, transferCommand.constructed().size());
-        verify(transferCommand.constructed().get(0), times(1)).execute();
+        verify(transferCommand.constructed().get(0)).execute();
         assertEquals("TID", id);
     }
 
@@ -456,7 +456,7 @@ public class TestCustomer {
         });
         String id = customer.makeTransfer(mockAccount, "ID2", "OtherBank", "SWIFT", 1000.0);
         assertEquals(1, transferCommand.constructed().size());
-        verify(transferCommand.constructed().get(0), times(1)).execute();
+        verify(transferCommand.constructed().get(0)).execute();
         assertNull(id);
     }
 
@@ -485,7 +485,7 @@ public class TestCustomer {
     public void test_makeReporting_noFilter() {
         String report = customer.makeReporting();
         assertEquals(1, reportCommand.constructed().size());
-        verify(reportCommand.constructed().get(0), times(1)).execute();
+        verify(reportCommand.constructed().get(0)).execute();
         assertEquals("report", report);
     }
 
@@ -493,7 +493,7 @@ public class TestCustomer {
     public void test_makeReporting_withFilter() {
         String report = customer.makeReporting(p -> true);
         assertEquals(1, reportCommand.constructed().size());
-        verify(reportCommand.constructed().get(0), times(1)).execute();
+        verify(reportCommand.constructed().get(0)).execute();
         assertEquals("report", report);
     }
 
@@ -504,7 +504,7 @@ public class TestCustomer {
         customer.addTransferToAuthorize(mockTransferCommand);
         boolean success = customer.authorizeTransfer("TID", "1234");
         assertEquals(0, transferCommand.constructed().size());
-        verify(mockTransferCommand, times(1)).execute();
+        verify(mockTransferCommand).execute();
         assertTrue(success);
     }
 
@@ -513,7 +513,7 @@ public class TestCustomer {
         when(mockTransferCommand.getId()).thenReturn("TID");
         boolean success = customer.authorizeTransfer("TID", "1234");
         assertEquals(0, transferCommand.constructed().size());
-        verify(mockTransferCommand, times(0)).execute();
+        verify(mockTransferCommand, never()).execute();
         assertFalse(success);
     }
 
@@ -521,7 +521,7 @@ public class TestCustomer {
     public void test_accept() {
         when(mockVisitor.visitCustomer(customer)).thenReturn("visited");
         String res = customer.accept(mockVisitor);
-        verify(mockVisitor, times(1)).visitCustomer(customer);
+        verify(mockVisitor).visitCustomer(customer);
         assertEquals("visited", res);
     }
 

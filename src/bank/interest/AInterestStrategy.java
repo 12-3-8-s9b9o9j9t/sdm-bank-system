@@ -11,6 +11,15 @@ public abstract class AInterestStrategy {
     public static final double HIGH_RATE = 0.02;
 
     private LocalDate lastCalculationDate = null;
+    private String name;
+
+    public AInterestStrategy(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public abstract double calculate(Product product);
 

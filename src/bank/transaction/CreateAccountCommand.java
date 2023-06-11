@@ -3,7 +3,7 @@ package bank.transaction;
 import bank.Bank;
 import bank.Customer;
 import bank.exception.InvalidCustomerException;
-import bank.product.Product;
+import bank.product.account.AAccount;
 
 public class CreateAccountCommand extends ATransactionCommand {
 
@@ -25,7 +25,7 @@ public class CreateAccountCommand extends ATransactionCommand {
     @Override
     public boolean execute() {
         try {
-            Product account = bank.createAccount(owner);
+            AAccount account = bank.createAccount(owner);
             account.log(this);
             return true;
         } catch (InvalidCustomerException e) {

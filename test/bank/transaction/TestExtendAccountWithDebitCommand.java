@@ -17,6 +17,7 @@ public class TestExtendAccountWithDebitCommand {
     private Bank mockBank = null;
     private Customer mockCustomer = null;
     private AAccount mockAccount = null;
+    private AAccount mockDebitAccount = null;
     private ExtendAccountWithDebitCommand command = null;
 
     @Before
@@ -24,6 +25,7 @@ public class TestExtendAccountWithDebitCommand {
         mockBank = mock(Bank.class);
         mockCustomer = mock(Customer.class);
         mockAccount = mock(AAccount.class);
+        mockDebitAccount = mock(AAccount.class);
         when(mockAccount.getId()).thenReturn("ID");
         command = new ExtendAccountWithDebitCommand(mockBank, mockCustomer, mockAccount, 1000.0);
     }
@@ -38,21 +40,20 @@ public class TestExtendAccountWithDebitCommand {
 
     @Test
     public void test_execute_success() throws Exception {
+        when(mockBank.extendAccountWithDebit(any(Customer.class), any(AAccount.class), anyDouble())).thenReturn(mockDebitAccount);
         boolean success = command.execute();
         assertTrue(success);
-        verify(mockBank, times(1)).extendAccountWithDebit(mockCustomer, mockAccount, 1000.0);
-        verify(mockAccount, times(1)).log(command);
+        verify(mockBank).extendAccountWithDebit(mockCustomer, mockAccount, 1000.0);
+        verify(mockDebitAccount).log(command);
     }
 
     @Test
     public void test_execute_failure() throws Exception {
-        doAnswer(invocation -> {
-            throw new InvalidInputException("Invalid Input");
-        }).when(mockBank).extendAccountWithDebit(any(Customer.class), any(AAccount.class), anyDouble());
+        when(mockBank.extendAccountWithDebit(any(Customer.class), any(AAccount.class), anyDouble())).thenThrow(new InvalidInputException("test"));
         boolean success = command.execute();
         assertFalse(success);
-        verify(mockBank, times(1)).extendAccountWithDebit(mockCustomer, mockAccount, 1000.0);
-        verify(mockAccount, times(0)).log(command);
+        verify(mockBank).extendAccountWithDebit(mockCustomer, mockAccount, 1000.0);
+        verify(mockAccount, never()).log(command);
     }
 
     @Test

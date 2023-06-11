@@ -13,6 +13,7 @@ public class FixedInterestStrategy extends AInterestStrategy {
     }
 
     public FixedInterestStrategy(double rate) {
+        super("Fixed Interest");
         this.rate = rate;
     }
 

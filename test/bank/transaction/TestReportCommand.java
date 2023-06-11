@@ -67,10 +67,10 @@ public class TestReportCommand {
         assertTrue(builder.length() == 0);
         boolean result = command_noFilter.execute();
         assertTrue(result);
-        verify(mockCustomer, times(1)).accept(mockIVisitor);
-        verify(mockProduct, times(1)).accept(mockIVisitor);
-        verify(mockATransactionCommand, times(1)).accept(mockIVisitor);
-        verify(mockProduct2, times(1)).accept(mockIVisitor);
+        verify(mockCustomer).accept(mockIVisitor);
+        verify(mockProduct).accept(mockIVisitor);
+        verify(mockATransactionCommand).accept(mockIVisitor);
+        verify(mockProduct2).accept(mockIVisitor);
         assertTrue(builder.length() > 0);
     }
 
@@ -85,10 +85,10 @@ public class TestReportCommand {
         assertTrue(builder.length() == 0);
         boolean result = command_filter.execute();
         assertTrue(result);
-        verify(mockCustomer, times(1)).accept(mockIVisitor);
-        verify(mockProduct, times(1)).accept(mockIVisitor);
-        verify(mockATransactionCommand, times(1)).accept(mockIVisitor);
-        verify(mockProduct2, times(0)).accept(mockIVisitor);
+        verify(mockCustomer).accept(mockIVisitor);
+        verify(mockProduct).accept(mockIVisitor);
+        verify(mockATransactionCommand).accept(mockIVisitor);
+        verify(mockProduct2, never()).accept(mockIVisitor);
         assertTrue(builder.length() > 0);
     }
 

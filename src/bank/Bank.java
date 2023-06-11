@@ -96,7 +96,7 @@ public class Bank {
         return customer;
     }
 
-    public Product createAccount(Customer owner) throws InvalidCustomerException {
+    public AAccount createAccount(Customer owner) throws InvalidCustomerException {
         checkCustomer(owner);
         String id = generateProductID();
         AAccount account = new BaseAccount(id, this, owner);
@@ -105,7 +105,7 @@ public class Bank {
         return account;
     }
     
-    public Product createCredit(Customer owner, double limit) throws InvalidInputException {
+    public Credit createCredit(Customer owner, double limit) throws InvalidInputException {
         checkCustomer(owner);
         checkAmount(limit);
         String id = "CRD" + generateProductID();
@@ -114,7 +114,7 @@ public class Bank {
         return credit;
     }
 
-    public Product createLoan(Customer owner, AAccount account, Period period, double amount) throws InvalidInputException {
+    public Loan createLoan(Customer owner, AAccount account, Period period, double amount) throws InvalidInputException {
         checkCustomer(owner);
         checkProduct(owner, account);
         checkAmount(amount);
@@ -125,7 +125,7 @@ public class Bank {
         return loan;
     }
 
-    public Product createDeposit(Customer owner, AAccount account, Period period, double amount) throws InvalidInputException {
+    public Deposit createDeposit(Customer owner, AAccount account, Period period, double amount) throws InvalidInputException {
         checkCustomer(owner);
         checkProduct(owner, account);
         checkAmount(amount);
@@ -136,7 +136,7 @@ public class Bank {
         return deposit;
     }
 
-    public Product extendAccountWithDebit(Customer owner, AAccount account, double limit) throws InvalidInputException {
+    public AAccount extendAccountWithDebit(Customer owner, AAccount account, double limit) throws InvalidInputException {
         checkCustomer(owner);
         checkProduct(owner, account);
         checkAmount(limit);

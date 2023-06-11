@@ -3,7 +3,7 @@ package bank.transaction;
 import bank.Bank;
 import bank.Customer;
 import bank.exception.InvalidInputException;
-import bank.product.Product;
+import bank.product.Credit;
 
 public class CreateCreditCommand extends ATransactionCommand {
 
@@ -28,7 +28,7 @@ public class CreateCreditCommand extends ATransactionCommand {
     @Override
     public boolean execute() {
         try {
-            Product credit = bank.createCredit(owner, limit);
+            Credit credit = bank.createCredit(owner, limit);
             credit.log(this);
             return true;
         } catch (InvalidInputException e) {

@@ -22,14 +22,15 @@ public class CloseDepositCommand extends ATransactionCommand {
 
     @Override
     public boolean execute() {
+        boolean success = true;
         try {
             deposit.close();
         } catch (InvalidTransactionException e) {
             setDescription(getDescription() + ": Failed");
-            return false;
+            success = false;
         }
         deposit.log(this);
-        return true;
+        return success;
     }
 
     @Override
