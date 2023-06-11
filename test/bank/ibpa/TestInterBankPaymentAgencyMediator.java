@@ -1,6 +1,5 @@
 package bank.ibpa;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
