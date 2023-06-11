@@ -1,12 +1,12 @@
 package bank.transaction.transfer;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class WaitAuthorizationState extends ATransferState {
 
-    private static final int MAX_TIME = 5;
+    private static final int MAX_TIME_MINUTES = 5;
 
-    private LocalTime time = LocalTime.now();
+    private LocalDateTime time = LocalDateTime.now();
 
     public WaitAuthorizationState(TransferCommand context) {
         super(context);
@@ -15,7 +15,7 @@ public class WaitAuthorizationState extends ATransferState {
     @Override
     public boolean execute() {
         TransferCommand context = getContext();
-        if (LocalTime.now().isAfter(time.plusMinutes(MAX_TIME))) {
+        if (LocalDateTime.now().isAfter(time.plusMinutes(MAX_TIME_MINUTES))) {
             return false;
         }
         context.changeState(new WaitReceivingAccountState(context))

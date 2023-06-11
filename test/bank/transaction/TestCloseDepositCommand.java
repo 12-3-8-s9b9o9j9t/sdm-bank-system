@@ -11,8 +11,6 @@ import org.junit.Test;
 
 import bank.exception.InvalidTransactionException;
 import bank.product.Deposit;
-import bank.product.ISuppliable;
-import bank.product.Product;
 import bank.product.account.AAccount;
 
 public class TestCloseDepositCommand {

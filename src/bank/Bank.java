@@ -79,7 +79,7 @@ public class Bank {
             ibpa.notify(this, "register");
         } catch (InvalidBankException e) {
             // This should never happen
-            throw new RuntimeException("InvalidBankException occurred", e);
+            throw new RuntimeException("Unexpected InvalidBankException occurred", e);
         }
     }
 

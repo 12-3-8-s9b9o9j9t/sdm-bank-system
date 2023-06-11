@@ -12,14 +12,13 @@ public class WaitReceivingAccountState extends ATransferState {
     @Override
     public boolean execute() {
         TransferCommand context = getContext();
-        AAccount receivingAccount = context.getReceivingAccount();
-        if (receivingAccount == null || !receivingAccount.getId().equals(context.getReceivingAccountID()) ) {
+        AAccount receiving = context.getReceivingAccount();
+        if (receiving == null || !receiving.getId().equals(context.getReceivingAccountID()) ) {
             return false;
         }
         try { // no exception should be thrown
             double amount = context.getAmount();
             AAccount sending = context.getSendingAccount();
-            AAccount receiving = context.getReceivingAccount();
             sending.charge(amount);
             TransferCommand sent = context.copy();
             sending.log(sent.changeState(new TransferSentState(sent)));
@@ -27,7 +26,7 @@ public class WaitReceivingAccountState extends ATransferState {
             TransferCommand received = context.copy();
             receiving.log(received.changeState(new TransferReceivedState(received)));
         } catch (InvalidTransactionException e) {
-            return false;
+            throw new RuntimeException("Unexpected InvalidTransactionException occured", e);
         }
         return true;
     }
