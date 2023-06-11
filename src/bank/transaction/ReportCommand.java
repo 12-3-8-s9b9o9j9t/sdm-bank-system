@@ -6,18 +6,18 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import bank.Customer;
-import bank.product.Product;
+import bank.product.AProduct;
 import bank.reporter.IVisitor;
 import bank.reporter.ReporterVisitor;
 
 public class ReportCommand extends ATransactionCommand {
 
     private StringBuilder builder;
-    private Predicate<Product> filter;
+    private Predicate<AProduct> filter;
     private IVisitor visitor = new ReporterVisitor();
     private Customer customer;
 
-    public ReportCommand(StringBuilder builder, Predicate<Product> filter, Customer customer) {
+    public ReportCommand(StringBuilder builder, Predicate<AProduct> filter, Customer customer) {
         super("Report", "Reporting");
         this.builder = builder;
         this.filter = filter;
@@ -28,7 +28,7 @@ public class ReportCommand extends ATransactionCommand {
     public boolean execute() {
         builder.append(customer.accept(visitor));
         builder.append('\n');
-        Stream<Product> ps = customer.getProducts().values().stream();
+        Stream<AProduct> ps = customer.getProducts().values().stream();
         if (filter != null) {
             ps = ps.filter(filter);
         }

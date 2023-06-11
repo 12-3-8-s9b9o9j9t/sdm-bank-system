@@ -21,7 +21,7 @@ import bank.interest.AInterestStrategy;
 import bank.product.Credit;
 import bank.product.Deposit;
 import bank.product.Loan;
-import bank.product.Product;
+import bank.product.AProduct;
 import bank.product.account.AAccount;
 import bank.product.account.BaseAccount;
 import bank.product.account.DebitDecorator;
@@ -148,14 +148,14 @@ public class Bank {
 
     public boolean changeInterest(int customerID, String productID, AInterestStrategy strategy) {
         Customer customer = customers.get(customerID);
-        Product product = customer.getProduct(productID);
+        AProduct product = customer.getProduct(productID);
         return new ChangeInterestCommand(product, strategy)
             .execute();
     }
 
     public void calculateInterest() {
         for (Customer customer: customers.values()) {
-            for (Product product: customer.getProducts().values()) {
+            for (AProduct product: customer.getProducts().values()) {
                 new CalculateInterestCommand(product)
                     .execute();
             }
@@ -176,7 +176,7 @@ public class Bank {
         }
     }
 
-    private void checkProduct(Customer owner, Product product) throws InvalidProductException {
+    private void checkProduct(Customer owner, AProduct product) throws InvalidProductException {
         if(owner.getProduct(product.getId()) == null) {
             throw new InvalidProductException(product.getId());
         }

@@ -13,7 +13,7 @@ import bank.transaction.ChargeProductCommand;
 import bank.transaction.SupplyProductCommand;
 import bank.reporter.IVisitor;
 
-public class Deposit extends Product implements ISuppliable {
+public class Deposit extends AProduct implements ISuppliable {
 
     private AAccount account;
     private LocalDate targetDate;

@@ -9,16 +9,16 @@ import org.junit.Test;
 
 import bank.exception.InvalidTransactionException;
 import bank.product.IChargeable;
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class TestChargeProductCommand {
     
-    private Product mockCharged = null;
+    private AProduct mockCharged = null;
     private ChargeProductCommand command = null;
 
     @Before
     public void setUp() {
-        mockCharged = mock(Product.class, withSettings().extraInterfaces(IChargeable.class));
+        mockCharged = mock(AProduct.class, withSettings().extraInterfaces(IChargeable.class));
         when(mockCharged.getId()).thenReturn("ID");
         command = new ChargeProductCommand((IChargeable)mockCharged, 1000.0);
     }

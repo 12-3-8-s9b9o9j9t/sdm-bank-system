@@ -2,7 +2,7 @@ package bank.transaction;
 
 import bank.exception.InvalidTransactionException;
 import bank.product.IChargeable;
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class ChargeProductCommand extends ATransactionCommand {
 
@@ -14,7 +14,7 @@ public class ChargeProductCommand extends ATransactionCommand {
             new StringBuilder("Charging ")
             .append(amount)
             .append(" to product ")
-            .append(((Product)charged).getId()).toString());
+            .append(((AProduct)charged).getId()).toString());
         this.charged = charged;
         this.amount = amount;
     }
@@ -22,7 +22,7 @@ public class ChargeProductCommand extends ATransactionCommand {
     @Override
     public boolean execute() {
         boolean success = true;
-        Product product = (Product) charged;
+        AProduct product = (AProduct) charged;
         try {
             charged.charge(amount);
         }

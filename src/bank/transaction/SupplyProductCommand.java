@@ -2,7 +2,7 @@ package bank.transaction;
 
 import bank.exception.InvalidTransactionException;
 import bank.product.ISuppliable;
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class SupplyProductCommand extends ATransactionCommand {
 
@@ -15,7 +15,7 @@ public class SupplyProductCommand extends ATransactionCommand {
             new StringBuilder("Supplying ")
             .append(amount)
             .append(" to product ")
-            .append(((Product)supplied).getId()).toString());
+            .append(((AProduct)supplied).getId()).toString());
         this.supplied = supplied;
         this.amount = amount;
     }
@@ -23,7 +23,7 @@ public class SupplyProductCommand extends ATransactionCommand {
     @Override
     public boolean execute() {
         boolean success = true;
-        Product product = (Product) supplied;
+        AProduct product = (AProduct) supplied;
         try {
             supplied.supply(amount);
         }

@@ -11,7 +11,7 @@ import bank.transaction.ChargeProductCommand;
 import bank.transaction.SupplyProductCommand;
 import bank.reporter.IVisitor;
 
-public class Loan extends Product implements ISuppliable {
+public class Loan extends AProduct implements ISuppliable {
 
     private AAccount account;
     private LocalDate targetDate;

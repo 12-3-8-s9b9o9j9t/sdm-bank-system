@@ -8,17 +8,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import bank.interest.AInterestStrategy;
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class TestChangeInterestCommand {
     
-    private Product mockProduct = null;
+    private AProduct mockProduct = null;
     private AInterestStrategy mockStrategy = null;
     private ChangeInterestCommand command = null;
 
     @Before
     public void setUp() {
-        mockProduct = mock(Product.class);
+        mockProduct = mock(AProduct.class);
         when(mockProduct.getId()).thenReturn("ID");
         mockStrategy = mock(AInterestStrategy.class);
         when(mockStrategy.getName()).thenReturn("Mock Interest");

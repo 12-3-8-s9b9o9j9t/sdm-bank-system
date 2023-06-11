@@ -7,16 +7,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class TestCalculateInterestCommand {
     
-    private Product mockProduct = null;
+    private AProduct mockProduct = null;
     private CalculateInterestCommand command = null;
 
     @Before
     public void setUp() {
-        mockProduct = mock(Product.class);
+        mockProduct = mock(AProduct.class);
         when(mockProduct.getId()).thenReturn("ID");
         when(mockProduct.calculateInterest()).thenReturn(100.0);
         command = new CalculateInterestCommand(mockProduct);

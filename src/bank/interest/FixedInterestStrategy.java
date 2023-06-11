@@ -2,7 +2,7 @@ package bank.interest;
 
 import java.time.LocalDate;
 
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class FixedInterestStrategy extends AInterestStrategy {
 
@@ -18,7 +18,7 @@ public class FixedInterestStrategy extends AInterestStrategy {
     }
 
     @Override
-    public double calculate(Product product) {
+    public double calculate(AProduct product) {
         if (getLastCalculationDate() == null) {
             setLastCalculationDate(product.getCreationDate());
         }

@@ -10,7 +10,7 @@ import bank.exception.InvalidProductException;
 import bank.product.Deposit;
 import bank.product.IChargeable;
 import bank.product.ISuppliable;
-import bank.product.Product;
+import bank.product.AProduct;
 import bank.product.account.AAccount;
 import bank.reporter.IVisitor;
 import bank.transaction.ChargeProductCommand;
@@ -30,7 +30,7 @@ public class Customer implements IElement {
     private String name;
     private int password;
     private Bank bank;
-    private Map<String, Product> products = new HashMap<>();
+    private Map<String, AProduct> products = new HashMap<>();
     private Map<String, TransferCommand> toAuthorize = new HashMap<>();
 
     // package-private constructor, only Bank can create Customer
@@ -53,19 +53,19 @@ public class Customer implements IElement {
         return bank;
     }
 
-    public Map<String, Product> getProducts() {
+    public Map<String, AProduct> getProducts() {
         return products;
     }
 
-    public Product getProduct(String id) {
+    public AProduct getProduct(String id) {
         return products.get(id);
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(AProduct product) {
         products.put(product.getId(), product);
     }
 
-    public boolean removeProduct(Product product) {
+    public boolean removeProduct(AProduct product) {
         return products.remove(product.getId()) != null;
     }
 
@@ -119,14 +119,14 @@ public class Customer implements IElement {
 
     public boolean supplyProduct(ISuppliable supplied, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
-        checkProduct((Product)supplied);
+        checkProduct((AProduct)supplied);
         return new SupplyProductCommand(supplied, amount)
             .execute();
     }
 
     public boolean chargeProduct(IChargeable charged, double amount) throws InvalidAmountException, InvalidProductException {
         checkAmount(amount);
-        checkProduct((Product)charged);
+        checkProduct((AProduct)charged);
         return new ChargeProductCommand(charged, amount)
             .execute();
     }
@@ -155,7 +155,7 @@ public class Customer implements IElement {
         return makeReporting(null);
     }
 
-    public String makeReporting(Predicate<Product> filter) {
+    public String makeReporting(Predicate<AProduct> filter) {
         StringBuilder builder = new StringBuilder();
         new ReportCommand(builder, filter, this)
             .execute();
@@ -176,7 +176,7 @@ public class Customer implements IElement {
         return visitor.visitCustomer(this);
     }
 
-    private void checkProduct(Product product) throws InvalidProductException {
+    private void checkProduct(AProduct product) throws InvalidProductException {
         if(!products.containsKey(product.getId())) {
             throw new InvalidProductException(product.getId());
         }

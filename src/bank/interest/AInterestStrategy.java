@@ -2,7 +2,7 @@ package bank.interest;
 
 import java.time.LocalDate;
 
-import bank.product.Product;
+import bank.product.AProduct;
 
 public abstract class AInterestStrategy {
 
@@ -21,7 +21,7 @@ public abstract class AInterestStrategy {
         return name;
     }
 
-    public abstract double calculate(Product product);
+    public abstract double calculate(AProduct product);
 
     public LocalDate getLastCalculationDate() {
         return lastCalculationDate;

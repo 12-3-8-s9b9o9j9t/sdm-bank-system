@@ -1,13 +1,13 @@
 package bank.transaction;
 
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class CalculateInterestCommand extends ATransactionCommand {
 
-    private Product product;
+    private AProduct product;
     private double value = 0;
 
-    public CalculateInterestCommand(Product product) {
+    public CalculateInterestCommand(AProduct product) {
         super("Calculate Interest",
             new StringBuilder("Calculating Interest for Product ")
             .append(product.getId()).toString());

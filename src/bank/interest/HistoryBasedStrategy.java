@@ -3,7 +3,7 @@ package bank.interest;
 import java.time.LocalDate;
 import java.util.List;
 
-import bank.product.Product;
+import bank.product.AProduct;
 import bank.transaction.ATransactionCommand;
 
 public class HistoryBasedStrategy extends AInterestStrategy {
@@ -20,7 +20,7 @@ public class HistoryBasedStrategy extends AInterestStrategy {
     }
 
     @Override
-    public double calculate(Product product) {
+    public double calculate(AProduct product) {
         if (getLastCalculationDate() == null) {
             setLastCalculationDate(product.getCreationDate());
         }

@@ -14,14 +14,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import bank.Customer;
-import bank.product.Product;
+import bank.product.AProduct;
 import bank.reporter.IVisitor;
 
 public class TestReportCommand {
     
     private ATransactionCommand mockATransactionCommand = null;
-    private Product mockProduct = null;
-    private Product mockProduct2 = null;
+    private AProduct mockProduct = null;
+    private AProduct mockProduct2 = null;
     private Customer mockCustomer = null;
     private IVisitor mockIVisitor = null;
     private ReportCommand command_noFilter = null;
@@ -30,8 +30,8 @@ public class TestReportCommand {
     @Before
     public void setUp() {
         mockATransactionCommand = mock(ATransactionCommand.class);
-        mockProduct = mock(Product.class);
-        mockProduct2 = mock(Product.class);
+        mockProduct = mock(AProduct.class);
+        mockProduct2 = mock(AProduct.class);
         mockCustomer = mock(Customer.class);
         mockIVisitor = mock(IVisitor.class);
         when(mockATransactionCommand.accept(any(IVisitor.class))).thenReturn("T");

@@ -1,14 +1,14 @@
 package bank.transaction;
 
 import bank.interest.AInterestStrategy;
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class ChangeInterestCommand extends ATransactionCommand {
 
-    private Product product;
+    private AProduct product;
     private AInterestStrategy strategy;
 
-    public ChangeInterestCommand(Product product, AInterestStrategy strategy) {
+    public ChangeInterestCommand(AProduct product, AInterestStrategy strategy) {
         super("Set Interest",
             new StringBuilder("Changing Interest Mechanism for Product ")
             .append(product.getId())

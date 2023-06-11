@@ -9,16 +9,17 @@ import org.junit.Test;
 
 import bank.exception.InvalidTransactionException;
 import bank.product.ISuppliable;
-import bank.product.Product;
+import bank.reporter.IVisitor;
+import bank.product.AProduct;
 
 public class TestSupplyProductCommand {
     
-    private Product mockSupplied = null;
+    private AProduct mockSupplied = null;
     private SupplyProductCommand command = null;
 
     @Before
     public void setUp() {
-        mockSupplied = mock(Product.class, withSettings().extraInterfaces(ISuppliable.class));
+        mockSupplied = mock(AProduct.class, withSettings().extraInterfaces(ISuppliable.class));
         when(mockSupplied.getId()).thenReturn("ID");
         command = new SupplyProductCommand((ISuppliable)mockSupplied, 1000.0);
     }

@@ -1,6 +1,6 @@
 package bank.interest;
 
-import bank.product.Product;
+import bank.product.AProduct;
 
 public class NullInterestStrategy extends AInterestStrategy {
 
@@ -9,7 +9,7 @@ public class NullInterestStrategy extends AInterestStrategy {
     }
 
     @Override
-    public double calculate(Product product) {
+    public double calculate(AProduct product) {
         return 0;
     }
     

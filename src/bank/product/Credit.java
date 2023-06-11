@@ -5,7 +5,7 @@ import bank.exception.InvalidTransactionException;
 import bank.interest.HistoryBasedStrategy;
 import bank.reporter.IVisitor;
 
-public class Credit extends Product implements IChargeable, ISuppliable {
+public class Credit extends AProduct implements IChargeable, ISuppliable {
     
     private double limit;
     private double amount;

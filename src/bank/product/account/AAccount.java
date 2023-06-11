@@ -4,9 +4,9 @@ import bank.Bank;
 import bank.Customer;
 import bank.product.IChargeable;
 import bank.product.ISuppliable;
-import bank.product.Product;
+import bank.product.AProduct;
 
-public abstract class AAccount extends Product implements IChargeable, ISuppliable {
+public abstract class AAccount extends AProduct implements IChargeable, ISuppliable {
 
     public AAccount(String id, Bank bank) {
         super(id, bank);

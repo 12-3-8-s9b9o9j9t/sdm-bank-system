@@ -25,7 +25,7 @@ import bank.interest.AInterestStrategy;
 import bank.product.Credit;
 import bank.product.Deposit;
 import bank.product.Loan;
-import bank.product.Product;
+import bank.product.AProduct;
 import bank.product.account.AAccount;
 import bank.product.account.BaseAccount;
 import bank.product.account.DebitDecorator;
@@ -42,7 +42,7 @@ public class TestBank {
     private TransferCommand mockTransfer2 = null;
     private Customer mockCustomer = null;
     private Customer mockCustomer2 = null;
-    private Product mockProduct = null;
+    private AProduct mockProduct = null;
     private AAccount mockAccount = null;
     private AAccount mockAccount2 = null;
     private AInterestStrategy mockInterest = null;
@@ -65,7 +65,7 @@ public class TestBank {
         mockTransfer2 = mock(TransferCommand.class);
         mockCustomer = mock(Customer.class);
         mockCustomer2 = mock(Customer.class);
-        mockProduct = mock(Product.class);
+        mockProduct = mock(AProduct.class);
         mockAccount = mock(AAccount.class);
         mockAccount2 = mock(AAccount.class);
         mockInterest = mock(AInterestStrategy.class);

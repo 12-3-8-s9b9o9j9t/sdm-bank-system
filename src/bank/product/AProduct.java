@@ -11,7 +11,7 @@ import bank.IElement;
 import bank.reporter.IVisitor;
 import bank.transaction.ATransactionCommand;
 
-public abstract class Product implements IElement {
+public abstract class AProduct implements IElement {
     
     private String id; // given by the bank
     private Bank bank;
@@ -19,7 +19,7 @@ public abstract class Product implements IElement {
     private LocalDate creationDate = LocalDate.now();
     private AInterestStrategy interestStrategy;
 
-    public Product(String id, Bank bank) {
+    public AProduct(String id, Bank bank) {
         this.id = id;
         this.bank = bank;
     }

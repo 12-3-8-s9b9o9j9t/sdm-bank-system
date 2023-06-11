@@ -16,7 +16,7 @@ import bank.exception.InvalidProductException;
 import bank.product.Deposit;
 import bank.product.IChargeable;
 import bank.product.ISuppliable;
-import bank.product.Product;
+import bank.product.AProduct;
 import bank.product.account.AAccount;
 import bank.reporter.IVisitor;
 import bank.transaction.ChargeProductCommand;
@@ -36,8 +36,8 @@ public class TestCustomer {
     private Customer customer = null;
     private AAccount mockAccount = null;
     private Deposit mockDeposit = null;
-    private Product mockSuppliable = null;
-    private Product mockChargeable = null;
+    private AProduct mockSuppliable = null;
+    private AProduct mockChargeable = null;
     private TransferCommand mockTransferCommand = null;
     private IVisitor mockVisitor = null;
     private MockedConstruction<CreateAccountCommand> createAccountCommand = null;
@@ -60,8 +60,8 @@ public class TestCustomer {
         customer = new Customer(1, "John Doe", "1234", mockBank);
         mockAccount = mock(AAccount.class);
         mockDeposit = mock(Deposit.class);
-        mockSuppliable = mock(Product.class, withSettings().extraInterfaces(ISuppliable.class));
-        mockChargeable = mock(Product.class, withSettings().extraInterfaces(IChargeable.class));
+        mockSuppliable = mock(AProduct.class, withSettings().extraInterfaces(ISuppliable.class));
+        mockChargeable = mock(AProduct.class, withSettings().extraInterfaces(IChargeable.class));
         mockTransferCommand = mock(TransferCommand.class);
         mockVisitor = mock(IVisitor.class);
         createAccountCommand = mockConstruction(CreateAccountCommand.class, (mock, context) -> {
