@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import bank.exception.InvalidTransactionException;
 import bank.product.ISuppliable;
-import bank.reporter.IVisitor;
 import bank.product.AProduct;
 
 public class TestSupplyProductCommand {

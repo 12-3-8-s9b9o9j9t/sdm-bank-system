@@ -112,6 +112,7 @@ public class TestLoan {
     public void test_calculateInterest() {
         assertEquals(-100.0, loan.calculateInterest(), 0.0);
         assertEquals(1100.0, loan.getBalance(), 0.001);
+        verify(fixedInterestStrategy.constructed().get(0)).calculate(loan);
     }
 
     @Test
